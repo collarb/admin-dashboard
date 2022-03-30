@@ -74,14 +74,7 @@ function Login() {
                   </Button>
                 </Form>
 
-                <div className="d-flex justify-content-center align-items-center mt-4">
-                  <span className="fw-normal">
-                    Not registered?
-                    <Card.Link as={Link} to="/register" className="fw-bold">
-                      {` Create account `}
-                    </Card.Link>
-                  </span>
-                </div>
+                
               </div>
             </Col>
           </Row>

@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import useFetch from "../../context/useFetch";
+import useFetch from "../core/useFetch";
 import { LOGIN_API } from "../../util/apis";
 import { authContext } from "../../context/authContext";
 import { setAuthToken } from "../../util/storage";

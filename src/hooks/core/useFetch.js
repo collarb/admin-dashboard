@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import toast from "react-hot-toast";
-import { authContext } from "./authContext";
-import { getAuthToken } from "../util/storage";
+import { authContext } from "../../context/authContext";
+import { getAuthToken } from "../../util/storage";
 
 function useFetch() {
   const { logout } = useContext(authContext);
