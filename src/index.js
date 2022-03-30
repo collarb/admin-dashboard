@@ -4,6 +4,12 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// core styles
+import "./scss/volt.scss";
+
+// vendor styles
+import "react-datetime/css/react-datetime.css";
+
 ReactDOM.render(
   <React.StrictMode>
     <App />
