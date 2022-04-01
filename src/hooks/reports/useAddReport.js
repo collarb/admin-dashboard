@@ -4,20 +4,20 @@ import useFetch from "../core/useFetch";
 import { generateFormData } from "../../util/helper";
 
 function useAddReport() {
-  const [loading, setLoading] = useState(false);
+  const [adding, setAdding] = useState(false);
   const [success, setSuccess] = useState(false);
+  const ajax = useFetch();
 
   const addReport = (payload) => {
-    const ajax = useFetch();
     ajax(REPORT_API, { method: "POST", body: generateFormData(payload) }).then(
       (data) => {
         if (data) setSuccess(true);
-        setLoading(false);
+        setAdding(false);
       }
     );
   };
 
-  return { loading, success, addReport };
+  return { adding, success, addReport };
 }
 
 export default useAddReport;

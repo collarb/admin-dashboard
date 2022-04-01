@@ -18,101 +18,17 @@ import {
   Table,
   ProgressBar,
 } from "@themesberg/react-bootstrap";
-import { pageTraffic } from "../../data/tables";
 import useModal from "../../hooks/core/useModal";
 import ReportForm from "./ReportForm";
+import useGetReports from "../../hooks/reports/useGetReports";
+import Loader from "../core/Loader";
 
 function Reports() {
   const { openModal } = useModal();
+  const { reports, refresh, loading, refreshing } = useGetReports();
 
   const addForm = () => {
-    openModal(<ReportForm />, "Add incident");
-  };
-
-  const TableRow = (props) => {
-    const {
-      id,
-      source,
-      sourceIcon,
-      sourceIconColor,
-      sourceType,
-      category,
-      rank,
-      trafficShare,
-    } = props;
-
-    return (
-      <tr>
-        <td>
-          <Card.Link href="#" className="text-primary fw-bold">
-            {id}
-          </Card.Link>
-        </td>
-        <td className="fw-bold">
-          <FontAwesomeIcon
-            icon={sourceIcon}
-            className={`icon icon-xs text-${sourceIconColor} w-30`}
-          />
-          {source}
-        </td>
-        <td>{sourceType}</td>
-        <td>{category ? category : "--"}</td>
-        <td>{rank ? rank : "--"}</td>
-        <td>
-          <Row className="d-flex align-items-center">
-            <Col xs={12} xl={2} className="px-0">
-              <small className="fw-bold">{trafficShare}%</small>
-            </Col>
-            <Col xs={12} xl={10} className="px-0 px-xl-1">
-              <ProgressBar
-                variant="primary"
-                className="progress-lg mb-0"
-                now={trafficShare}
-                min={0}
-                max={100}
-              />
-            </Col>
-          </Row>
-        </td>
-        <td>
-          <Col xs={12} xl={10} className="px-0 px-xl-1">
-            <ProgressBar
-              variant="primary"
-              className="progress-lg mb-0"
-              now={50}
-              min={0}
-              max={100}
-            />
-          </Col>
-        </td>
-        <td>
-          <Dropdown className="btn-toolbar">
-            <Dropdown.Toggle
-              as={Button}
-              variant="success"
-              size="sm"
-              className="me-2"
-            >
-              <FontAwesomeIcon icon={faAngleDown} className="me-2" />
-              Action
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
-              <Dropdown.Item className="fw-bold">
-                <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" />{" "}
-                Add Feedback
-              </Dropdown.Item>
-              <Dropdown.Item className="fw-bold">
-                <FontAwesomeIcon icon={faFileArchive} className="me-2" />{" "}
-                Forward For Review
-              </Dropdown.Item>
-              <Dropdown.Item className="fw-bold">
-                <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </td>
-      </tr>
-    );
+    openModal(<ReportForm refresh={refresh}/>, "Add incident");
   };
 
   return (
@@ -169,9 +85,15 @@ function Reports() {
                       </tr>
                     </thead>
                     <tbody>
-                      {pageTraffic.map((pt) => (
-                        <TableRow key={`page-traffic-${pt.id}`} {...pt} />
-                      ))}
+                      {loading || refreshing ? (
+                        <Loader />
+                      ) : reports.length === 0 ? (
+                        <div>No dara</div>
+                      ) : (
+                        reports.map((pt) => (
+                          <TableRow key={`page-traffic-${pt.id}`} item={pt} />
+                        ))
+                      )}
                     </tbody>
                   </Table>
                 </Card.Body>
@@ -183,5 +105,91 @@ function Reports() {
     </>
   );
 }
+
+const TableRow = (props) => {
+  const {
+    id,
+    source,
+    sourceIcon,
+    sourceIconColor,
+    sourceType,
+    category,
+    rank,
+    trafficShare,
+  } = props;
+
+  return (
+    <tr>
+      <td>
+        <Card.Link href="#" className="text-primary fw-bold">
+          {id}
+        </Card.Link>
+      </td>
+      <td className="fw-bold">
+        <FontAwesomeIcon
+          icon={sourceIcon}
+          className={`icon icon-xs text-${sourceIconColor} w-30`}
+        />
+        {source}
+      </td>
+      <td>{sourceType}</td>
+      <td>{category ? category : "--"}</td>
+      <td>{rank ? rank : "--"}</td>
+      <td>
+        <Row className="d-flex align-items-center">
+          <Col xs={12} xl={2} className="px-0">
+            <small className="fw-bold">{trafficShare}%</small>
+          </Col>
+          <Col xs={12} xl={10} className="px-0 px-xl-1">
+            <ProgressBar
+              variant="primary"
+              className="progress-lg mb-0"
+              now={trafficShare}
+              min={0}
+              max={100}
+            />
+          </Col>
+        </Row>
+      </td>
+      <td>
+        <Col xs={12} xl={10} className="px-0 px-xl-1">
+          <ProgressBar
+            variant="primary"
+            className="progress-lg mb-0"
+            now={50}
+            min={0}
+            max={100}
+          />
+        </Col>
+      </td>
+      <td>
+        <Dropdown className="btn-toolbar">
+          <Dropdown.Toggle
+            as={Button}
+            variant="success"
+            size="sm"
+            className="me-2"
+          >
+            <FontAwesomeIcon icon={faAngleDown} className="me-2" />
+            Action
+          </Dropdown.Toggle>
+          <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
+            <Dropdown.Item className="fw-bold">
+              <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" /> Add
+              Feedback
+            </Dropdown.Item>
+            <Dropdown.Item className="fw-bold">
+              <FontAwesomeIcon icon={faFileArchive} className="me-2" /> Forward
+              For Review
+            </Dropdown.Item>
+            <Dropdown.Item className="fw-bold">
+              <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </td>
+    </tr>
+  );
+};
 
 export default Reports;
