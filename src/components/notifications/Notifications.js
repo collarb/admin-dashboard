@@ -43,11 +43,8 @@ function Notifications() {
                       <thead className="thead-light">
                         <tr>
                           <th className="border-0">#</th>
-                          <th className="border-0">Type</th>
-                          <th className="border-0">Subject</th>
                           <th className="border-0">Description</th>
-                          <th className="border-0">Affected Area</th>
-                          <th className="border-0">Reported On</th>
+                          <th className="border-0">Sent On</th>
                           <th className="border-0">Status</th>
                           <th className="border-0"></th>
                         </tr>
@@ -56,7 +53,7 @@ function Notifications() {
                         {loading ? (
                           <Loader />
                         ) : notifications.length === 0 ? (
-                          <div>No data</div>
+                          <div>No Notications</div>
                         ) : (
                           notifications.map((pt,index) => (
                             <TableRow key={`page-traffic-${pt.id}`} item={pt} index={index} />
@@ -84,44 +81,10 @@ function TableRow({item, index}) {
           {index+1}
         </Card.Link>
       </td>
-      <td className="fw-bold">
-        <FontAwesomeIcon
-          icon={faAngleDown}
-          className={`icon icon-xs text-gray w-30`}
-        />
-        {item.type_display.name}
-      </td>
-      <td>{item.subject}</td>
       <td>{item.description ? item.description : "--"}</td>
-      <td>{item.area ? item.area.description : "--"}</td>
-      <td>
-        <Row className="d-flex align-items-center">
-          <Col xs={12} xl={2} className="px-0">
-            <small className="fw-bold">{item.views}%</small>
-          </Col>
-          <Col xs={12} xl={10} className="px-0 px-xl-1">
-            <ProgressBar
-              variant="primary"
-              className="progress-lg mb-0"
-              now={item.views}
-              min={0}
-              max={100}
-            />
-          </Col>
-        </Row>
-      </td>
-      <td>
-        <Col xs={12} xl={10} className="px-0 px-xl-1">
-          <ProgressBar
-            variant="primary"
-            className="progress-lg mb-0"
-            now={50}
-            min={0}
-            max={100}
-          />
-        </Col>
-      </td>
-      <td>
+      <td>{item.timestamp}</td>
+      <td>{item.uread? "Unread":"Read"}</td>
+      <td className="d-flex justify-content-between flex-wrap flex-md-nowrap">
         <Dropdown className="btn-toolbar">
           <Dropdown.Toggle
             as={Button}
@@ -132,17 +95,14 @@ function TableRow({item, index}) {
             <FontAwesomeIcon icon={faAngleDown} className="me-2" />
             Action
           </Dropdown.Toggle>
-          <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
+          <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left">
             <Dropdown.Item className="fw-bold">
-              <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" /> Add
-              Feedback
+              <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" /> Mark As
+              Read
             </Dropdown.Item>
             <Dropdown.Item className="fw-bold">
-              <FontAwesomeIcon icon={faFileArchive} className="me-2" /> Forward
-              For Review
-            </Dropdown.Item>
-            <Dropdown.Item className="fw-bold">
-              <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
+              <FontAwesomeIcon icon={faFileArchive} className="me-2" /> Mark As
+              UnRead
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
