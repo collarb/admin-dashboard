@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelopeOpenText, faAngleDown, faFileArchive, faCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEnvelopeOpenText,
+  faAngleDown,
+  faFileArchive,
+  faCheck,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   Col,
   Row,
@@ -8,18 +13,25 @@ import {
   Dropdown,
   Card,
   Table,
-  ProgressBar,
 } from "@themesberg/react-bootstrap";
 import useFetchIncidents from "../../hooks/incidents/useFetchIncidents";
 import Loader from "../core/Loader";
 import Actions from "../core/actions";
+import useUpdateStatus from "../../hooks/core/useUpdateStatus";
+import { STATUS_APPROVE, STATUS_FORWARD } from "../../util/constants";
+import { INCIDENTS_API } from "../../util/apis";
 
 function Incidents() {
-  const { loading, incidents } = useFetchIncidents();
+  const { loading, incidents, refresh } = useFetchIncidents();
+  const { updateStatus, success } = useUpdateStatus();
+
+  useEffect(() => {
+    if (success) refresh();
+  }, [success]);
 
   return (
     <>
-      <Actions/>
+      <Actions />
 
       <Row>
         <Col xs={12} xl={12} className="mb-4">
@@ -56,8 +68,13 @@ function Incidents() {
                       ) : incidents.length === 0 ? (
                         <div>No data</div>
                       ) : (
-                        incidents.map((pt,index) => (
-                          <TableRow key={`page-traffic-${pt.id}`} item={pt} index={index} />
+                        incidents.map((pt, index) => (
+                          <TableRow
+                            key={`page-traffic-${pt.id}`}
+                            item={pt}
+                            index={index}
+                            updateStatus={updateStatus}
+                          />
                         ))
                       )}
                     </tbody>
@@ -72,52 +89,31 @@ function Incidents() {
   );
 }
 
-function TableRow({item, index}) {
-
+function TableRow({ item, index, updateStatus }) {
   return (
     <tr>
       <td>
         <Card.Link href="#" className="text-primary fw-bold">
-          {index+1}
+          {index + 1}
         </Card.Link>
       </td>
-      <td className="fw-bold">
-        <FontAwesomeIcon
-          icon={faAngleDown}
-          className={`icon icon-xs text-gray w-30`}
-        />
-        {item.type_display.name}
-      </td>
+      <td className="fw-bold">{item.type_display.name}</td>
       <td>{item.subject}</td>
-      <td>{item.description ? item.description : "--"}</td>
-      <td>{item.area ? item.area.description : "--"}</td>
       <td>
-        <Row className="d-flex align-items-center">
-          <Col xs={12} xl={2} className="px-0">
-            <small className="fw-bold">{item.views}%</small>
-          </Col>
-          <Col xs={12} xl={10} className="px-0 px-xl-1">
-            <ProgressBar
-              variant="primary"
-              className="progress-lg mb-0"
-              now={item.views}
-              min={0}
-              max={100}
-            />
-          </Col>
-        </Row>
+        <p
+          style={{
+            width: "200px",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {item.description}
+        </p>
       </td>
-      <td>
-        <Col xs={12} xl={10} className="px-0 px-xl-1">
-          <ProgressBar
-            variant="primary"
-            className="progress-lg mb-0"
-            now={50}
-            min={0}
-            max={100}
-          />
-        </Col>
-      </td>
+      <td>{item.area.name}</td>
+      <td>{item.created_on}</td>
+      <td>{item.status}</td>
       <td>
         <Dropdown className="btn-toolbar">
           <Dropdown.Toggle
@@ -134,11 +130,31 @@ function TableRow({item, index}) {
               <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" /> Add
               Feedback
             </Dropdown.Item>
-            <Dropdown.Item className="fw-bold">
+            <Dropdown.Item
+              className="fw-bold"
+              onClick={() =>
+                updateStatus(
+                  INCIDENTS_API,
+                  "Are you sure you want to approve this incident for approval?",
+                  item.id,
+                  STATUS_FORWARD
+                )
+              }
+            >
               <FontAwesomeIcon icon={faFileArchive} className="me-2" /> Forward
               For Approval
             </Dropdown.Item>
-            <Dropdown.Item className="fw-bold">
+            <Dropdown.Item
+              className="fw-bold"
+              onClick={() =>
+                updateStatus(
+                  INCIDENTS_API,
+                  "Are you sure you want to approve this incident?",
+                  item.id,
+                  STATUS_APPROVE
+                )
+              }
+            >
               <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
             </Dropdown.Item>
           </Dropdown.Menu>
