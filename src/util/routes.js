@@ -1,11 +1,12 @@
 
 export const Routes = {
   reports: { path: "/reports" },
-  
-  // pages
-  Presentation: { path: "/" },
   DashboardOverview: { path: "/dashboard/overview" },
   Incidents: { path: "/incidents" },
+  Notifications: { path: "/notifications" },
+
+  // pages
+  Presentation: { path: "/" },
   Transactions: { path: "/transactions" },
   Settings: { path: "/settings" },
   Upgrade: { path: "/upgrade" },

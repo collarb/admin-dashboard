@@ -4,7 +4,7 @@ import SimpleBar from 'simplebar-react';
 import { useLocation } from "react-router-dom";
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faBoxOpen, faChartPie, faCog, faFileAlt, faHandHoldingUsd, faSignOutAlt, faTable, faTimes, faCalendarAlt, faMapPin, faInbox, faRocket } from "@fortawesome/free-solid-svg-icons";
+import { faBoxOpen, faBell, faHandHoldingUsd, faSignOutAlt,faTimes} from "@fortawesome/free-solid-svg-icons";
 import { Nav, Badge, Image, Button, Dropdown, Accordion, Navbar } from '@themesberg/react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -97,9 +97,9 @@ export default (props = {}) => {
             </div>
             <Nav className="flex-column pt-3 pt-md-0">
               <NavItem title="KCCA Connect" link={Routes.Presentation.path} image={ReactHero} />
-              <NavItem title="Notifications" link={Routes.DashboardOverview.path} icon={faChartPie} />
               <NavItem title="Incidents" icon={faHandHoldingUsd} link={Routes.Incidents.path} />
               <NavItem title="Reports" icon={faBoxOpen} link={Routes.reports.path} />
+              <NavItem title="Notifications" link={Routes.Notifications.path} icon={faBell} />
 
             </Nav>
           </div>
