@@ -7,12 +7,13 @@ import Login from '../account/Login';
 import { Routes } from '../../util/routes';
 import Reports from "../reports/Reports";
 import Container from './Container';
+import Notifications from '../notifications/Notifications';
 import ModalContextProvider from "../../context/ModalContext";
+
 
 function Router() {
   const { loggedIn, loading } = useContext(authContext);
-  console.log(loggedIn);
-
+  
   return loading ? (
     <div>Loading...</div>
   ) : loggedIn ? (
@@ -21,6 +22,7 @@ function Router() {
       <Route exact path="/" component={Dashboard} />
       <Route exact path={Routes.Incidents.path} component={Incidents} />
       <Route exact path={Routes.reports.path} component={Reports} />
+      <Route exact path={Routes.Notifications.path} component={Notifications} />
       <Redirect to="/" />
     </Container>
     </ModalContextProvider>

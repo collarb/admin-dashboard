@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faBook, faEnvelopeOpenText, faUserShield, faAngleDown, faFileArchive, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelopeOpenText, faAngleDown, faFileArchive, faCheck } from "@fortawesome/free-solid-svg-icons";
 import {
   Col,
   Row,
@@ -12,33 +12,14 @@ import {
 } from "@themesberg/react-bootstrap";
 import useFetchIncidents from "../../hooks/incidents/useFetchIncidents";
 import Loader from "../core/Loader";
+import Actions from "../core/actions";
 
 function Incidents() {
   const { loading, incidents } = useFetchIncidents();
 
   return (
     <>
-      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
-        <Dropdown className="btn-toolbar">
-          <Dropdown.Toggle
-            as={Button}
-            variant="primary"
-            size="sm"
-            className="me-2"
-          >
-            <FontAwesomeIcon icon={faPlus} className="me-2" />
-            Action
-          </Dropdown.Toggle>
-          <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
-            <Dropdown.Item className="fw-bold">
-              <FontAwesomeIcon icon={faUserShield} className="me-2" /> New User
-            </Dropdown.Item>
-            <Dropdown.Item className="fw-bold">
-              <FontAwesomeIcon icon={faBook} className="me-2" /> New Report
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
+      <Actions/>
 
       <Row>
         <Col xs={12} xl={12} className="mb-4">

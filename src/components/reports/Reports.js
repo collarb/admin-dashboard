@@ -1,10 +1,7 @@
 import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faPlus,
-  faBook,
   faEnvelopeOpenText,
-  faUserShield,
   faAngleDown,
   faFileArchive,
   faCheck,
@@ -17,15 +14,15 @@ import {
   Card,
   Table,
 } from "@themesberg/react-bootstrap";
-import useModal from "../../hooks/core/useModal";
-import ReportForm from "./ReportForm";
+
 import useGetReports from "../../hooks/reports/useGetReports";
 import Loader from "../core/Loader";
 import useUpdateStatus from "../../hooks/core/useUpdateStatus";
 import { REPORT, STATUS_APPROVE, STATUS_FORWARD } from "../../util/constants";
+import Actions from "../core/actions";
 
 function Reports() {
-  const { openModal } = useModal();
+
   const { reports, refresh, loading, refreshing } = useGetReports();
   const { updateStatus, success } = useUpdateStatus();
 
@@ -33,34 +30,10 @@ function Reports() {
     if (success) refresh();
   }, [success]);
 
-  const addForm = () => {
-    openModal(<ReportForm refresh={refresh} />, "Add incident");
-  };
 
   return (
     <>
-      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
-        <Dropdown className="btn-toolbar">
-          <Dropdown.Toggle
-            as={Button}
-            variant="primary"
-            size="sm"
-            className="me-2"
-          >
-            <FontAwesomeIcon icon={faPlus} className="me-2" />
-            Action
-          </Dropdown.Toggle>
-          <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
-            <Dropdown.Item className="fw-bold">
-              <FontAwesomeIcon icon={faUserShield} className="me-2" /> New User
-            </Dropdown.Item>
-            <Dropdown.Item className="fw-bold" onClick={addForm}>
-              <FontAwesomeIcon icon={faBook} className="me-2" /> New Report
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
-
+      <Actions refresh={refresh}/>
       <Row>
         <Col xs={12} xl={12} className="mb-4">
           <Row>
