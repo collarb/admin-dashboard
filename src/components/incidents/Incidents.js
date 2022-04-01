@@ -155,7 +155,7 @@ function TableRow({item, index}) {
             </Dropdown.Item>
             <Dropdown.Item className="fw-bold">
               <FontAwesomeIcon icon={faFileArchive} className="me-2" /> Forward
-              For Review
+              For Approval
             </Dropdown.Item>
             <Dropdown.Item className="fw-bold">
               <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve

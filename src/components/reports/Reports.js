@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlus,
@@ -16,19 +16,25 @@ import {
   Dropdown,
   Card,
   Table,
-  ProgressBar,
 } from "@themesberg/react-bootstrap";
 import useModal from "../../hooks/core/useModal";
 import ReportForm from "./ReportForm";
 import useGetReports from "../../hooks/reports/useGetReports";
 import Loader from "../core/Loader";
+import useUpdateStatus from "../../hooks/core/useUpdateStatus";
+import { REPORT, STATUS_APPROVE, STATUS_FORWARD } from "../../util/constants";
 
 function Reports() {
   const { openModal } = useModal();
   const { reports, refresh, loading, refreshing } = useGetReports();
+  const { updateStatus, success } = useUpdateStatus();
+
+  useEffect(() => {
+    if (success) refresh();
+  }, [success]);
 
   const addForm = () => {
-    openModal(<ReportForm refresh={refresh}/>, "Add incident");
+    openModal(<ReportForm refresh={refresh} />, "Add incident");
   };
 
   return (
@@ -90,8 +96,13 @@ function Reports() {
                       ) : reports.length === 0 ? (
                         <div>No dara</div>
                       ) : (
-                        reports.map((pt) => (
-                          <TableRow key={`page-traffic-${pt.id}`} item={pt} />
+                        reports.map((pt, index) => (
+                          <TableRow
+                            key={`page-traffic-${pt.id}`}
+                            index={index}
+                            item={pt}
+                            updateStatus={updateStatus}
+                          />
                         ))
                       )}
                     </tbody>
@@ -107,61 +118,32 @@ function Reports() {
 }
 
 const TableRow = (props) => {
-  const {
-    id,
-    source,
-    sourceIcon,
-    sourceIconColor,
-    sourceType,
-    category,
-    rank,
-    trafficShare,
-  } = props;
+  const { item, index, updateStatus } = props;
 
   return (
     <tr>
       <td>
         <Card.Link href="#" className="text-primary fw-bold">
-          {id}
+          {index + 1}
         </Card.Link>
       </td>
-      <td className="fw-bold">
-        <FontAwesomeIcon
-          icon={sourceIcon}
-          className={`icon icon-xs text-${sourceIconColor} w-30`}
-        />
-        {source}
-      </td>
-      <td>{sourceType}</td>
-      <td>{category ? category : "--"}</td>
-      <td>{rank ? rank : "--"}</td>
+      <td>{item.type_display.name}</td>
+      <td>{item.title}</td>
       <td>
-        <Row className="d-flex align-items-center">
-          <Col xs={12} xl={2} className="px-0">
-            <small className="fw-bold">{trafficShare}%</small>
-          </Col>
-          <Col xs={12} xl={10} className="px-0 px-xl-1">
-            <ProgressBar
-              variant="primary"
-              className="progress-lg mb-0"
-              now={trafficShare}
-              min={0}
-              max={100}
-            />
-          </Col>
-        </Row>
+        <p
+          style={{
+            width: "100px",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {item.description}
+        </p>
       </td>
-      <td>
-        <Col xs={12} xl={10} className="px-0 px-xl-1">
-          <ProgressBar
-            variant="primary"
-            className="progress-lg mb-0"
-            now={50}
-            min={0}
-            max={100}
-          />
-        </Col>
-      </td>
+      <td>{item.area.name}</td>
+      <td>{item.created_on}</td>
+      <td>{item.status}</td>
       <td>
         <Dropdown className="btn-toolbar">
           <Dropdown.Toggle
@@ -178,11 +160,31 @@ const TableRow = (props) => {
               <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" /> Add
               Feedback
             </Dropdown.Item>
-            <Dropdown.Item className="fw-bold">
+            <Dropdown.Item
+              className="fw-bold"
+              onClick={() =>
+                updateStatus(
+                  REPORT,
+                  "Are you sure you want to forward this report for review?",
+                  item.id,
+                  STATUS_FORWARD
+                )
+              }
+            >
               <FontAwesomeIcon icon={faFileArchive} className="me-2" /> Forward
               For Review
             </Dropdown.Item>
-            <Dropdown.Item className="fw-bold">
+            <Dropdown.Item
+              className="fw-bold"
+              onClick={() =>
+                updateStatus(
+                  REPORT,
+                  "Are you sure you want to approve this report?",
+                  item.id,
+                  STATUS_APPROVE
+                )
+              }
+            >
               <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
             </Dropdown.Item>
           </Dropdown.Menu>

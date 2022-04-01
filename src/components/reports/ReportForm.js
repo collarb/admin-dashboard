@@ -34,6 +34,12 @@ function ReportForm({refresh}) {
   }, [success])
 
   useEffect(() => {
+    if (types && types.length) {
+      setReportType(types[0].id);
+    }
+  }, [types]);
+
+  useEffect(() => {
     if (divisions && divisions.length) {
       setDivision(divisions[0].id);
       fetchChildren(divisions[0].id, "parishes");

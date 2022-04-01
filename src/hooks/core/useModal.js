@@ -11,21 +11,27 @@ function useModal() {
     setTitle(title);
   };
 
-  const ModalFooter = ({ok, cancel}) => {
-    return (
-        <Modal.Footer>
-          <Button
-            variant="link"
-            className="text-gray ms-auto"
-            onClick={() => setOpen(false)}
-          >
-            cancel
-          </Button>
+  const openConfirm = (title, confirm) => {
+    setOpen(true);
+    setBody(<ModalFooter ok={confirm} okText="Yes" cancelText="No" />);
+    setTitle(title);
+  };
 
-          <Button variant="secondary" type="submit">
-            Submit
-          </Button>
-        </Modal.Footer>
+  const ModalFooter = ({ ok = (f) => f, okText, cancelText }) => {
+    return (
+      <Modal.Footer>
+        <Button
+          variant="link"
+          className="text-gray ms-auto"
+          onClick={() => setOpen(false)}
+        >
+          {cancelText || "Cancel"}
+        </Button>
+
+        <Button variant="secondary" type="submit" onClick={() => ok()}>
+          {okText || "Submit"}
+        </Button>
+      </Modal.Footer>
     );
   };
 
@@ -33,7 +39,7 @@ function useModal() {
     setOpen(false);
   };
 
-  return { openModal, ModalFooter, closeModal };
+  return { openModal, openConfirm, ModalFooter, closeModal };
 }
 
 export default useModal;

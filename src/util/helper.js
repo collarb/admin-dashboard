@@ -4,5 +4,5 @@ export const generateFormData = (payload) => {
   Object.keys(payload).forEach((key) => {
     formData.append(key, payload[key]);
   });
-  return payload;
+  return formData;
 };
