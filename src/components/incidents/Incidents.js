@@ -10,7 +10,6 @@ import {
   Table,
   ProgressBar,
 } from "@themesberg/react-bootstrap";
-import { pageTraffic } from "../../data/tables";
 import useFetchIncidents from "../../hooks/incidents/useFetchIncidents";
 import Loader from "../core/Loader";
 
@@ -76,8 +75,8 @@ function Incidents() {
                       ) : incidents.length === 0 ? (
                         <div>No data</div>
                       ) : (
-                        incidents.map((pt) => (
-                          <TableRow key={`page-traffic-${pt.id}`} item={pt} />
+                        incidents.map((pt,index) => (
+                          <TableRow key={`page-traffic-${pt.id}`} item={pt} index={index} />
                         ))
                       )}
                     </tbody>
@@ -92,13 +91,13 @@ function Incidents() {
   );
 }
 
-function TableRow({item}) {
+function TableRow({item, index}) {
 
   return (
     <tr>
       <td>
         <Card.Link href="#" className="text-primary fw-bold">
-          {item.id}
+          {index+1}
         </Card.Link>
       </td>
       <td className="fw-bold">
@@ -110,7 +109,7 @@ function TableRow({item}) {
       </td>
       <td>{item.subject}</td>
       <td>{item.description ? item.description : "--"}</td>
-      <td>{item.id ? item.id : "--"}</td>
+      <td>{item.area ? item.area.description : "--"}</td>
       <td>
         <Row className="d-flex align-items-center">
           <Col xs={12} xl={2} className="px-0">
