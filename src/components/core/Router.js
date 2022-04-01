@@ -9,13 +9,14 @@ import Reports from "../reports/Reports";
 import Container from './Container';
 import Notifications from '../notifications/Notifications';
 import ModalContextProvider from "../../context/ModalContext";
+import Loader from "../core/Loader";
 
 
 function Router() {
   const { loggedIn, loading } = useContext(authContext);
   
   return loading ? (
-    <div>Loading...</div>
+    <Loader/>
   ) : loggedIn ? (
     <ModalContextProvider>
       <Container>

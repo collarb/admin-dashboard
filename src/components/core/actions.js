@@ -12,7 +12,7 @@ import useModal from "../../hooks/core/useModal";
 import ReportForm from "../reports/ReportForm";
 
 
-function Actions({refresh=false}) {
+function Actions({refresh=f=>f}) {
     
     const { openModal } = useModal();
 
