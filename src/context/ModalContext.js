@@ -26,7 +26,7 @@ function ModalContextProvider({ children }) {
             onClick={() => setOpen(false)}
           />
         </Modal.Header>
-        <Modal.Body>{body}</Modal.Body>
+        {body}
       </Modal>
     </modalContext.Provider>
   );

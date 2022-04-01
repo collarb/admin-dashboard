@@ -13,8 +13,7 @@ import ModalContextProvider from "../../context/ModalContext";
 
 function Router() {
   const { loggedIn, loading } = useContext(authContext);
-  console.log(loggedIn);
-
+  
   return loading ? (
     <div>Loading...</div>
   ) : loggedIn ? (
