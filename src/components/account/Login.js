@@ -4,6 +4,7 @@ import { faEnvelope, faUnlockAlt } from "@fortawesome/free-solid-svg-icons";
 import {  Col, Row, Form, Card, Button, Container, InputGroup } from "@themesberg/react-bootstrap";
 import { Link } from "react-router-dom";
 import useLogin from '../../hooks/account/useLogin';
+import Loader from "../core/Loader";
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -28,6 +29,9 @@ function Login() {
                 <div className="text-center text-md-center mb-4 mt-md-0">
                   <h3 className="mb-0">Sign in to KCCA Connect</h3>
                 </div>
+                {
+                  loading?<Loader/>:null
+                }
                 <Form className="mt-4" onSubmit={submit}>
                   <Form.Group id="email" className="mb-4">
                     <Form.Label>Your Username</Form.Label>
