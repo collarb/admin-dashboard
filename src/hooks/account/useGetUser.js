@@ -4,7 +4,7 @@ import {ACCOUNT_API} from '../../util/apis';
 
 function useGetUser() {
     const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState(null);
     const ajax = useFetch();
 
     const getUser = () => {

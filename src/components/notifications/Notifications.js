@@ -13,6 +13,7 @@ import {
 import useNotifications from "../../hooks/notification/useNotifications";
 import Loader from "../core/Loader";
 import Actions from "../core/actions";
+import DropdownMenu from '../core/DropdownMenu';
 
 function Notifications() {
 
@@ -94,7 +95,7 @@ function TableRow({item, index}) {
             <FontAwesomeIcon icon={faAngleDown} className="me-2" />
             Action
           </Dropdown.Toggle>
-          <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left">
+          <DropdownMenu className="dashboard-dropdown dropdown-menu-left">
             <Dropdown.Item className="fw-bold">
               <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" /> Mark As
               Read
@@ -103,7 +104,7 @@ function TableRow({item, index}) {
               <FontAwesomeIcon icon={faFileArchive} className="me-2" /> Mark As
               UnRead
             </Dropdown.Item>
-          </Dropdown.Menu>
+          </DropdownMenu>
         </Dropdown>
       </td>
     </tr>

@@ -33,8 +33,8 @@ function AccountForm() {
 
   useEffect(() => {
     if(divisions.length) setDivision(divisions[0].id);
-    if(departments.length) setDepartment(departments[0].length);
-    if(designations.length) setDesignation(designations[0].length);
+    if(departments.length) setDepartment(departments[0].id);
+    if(designations.length) setDesignation(designations[0].id);
 
   }, [divisions, departments, designations]);
 

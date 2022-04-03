@@ -8,6 +8,7 @@ import Actions from "../core/actions";
 import useUpdateReport from "../../hooks/reports/useUpdateReport";
 import { STATUS_APPROVE, STATUS_FORWARD } from "../../util/constants";
 import { INCIDENTS_API } from "../../util/apis";
+import DropdownMenu from '../core/DropdownMenu';
 
 function Incidents() {
   const { loading, incidents, refresh } = useFetchIncidents();
@@ -113,7 +114,7 @@ function TableRow({ item, index, updateReport }) {
             <FontAwesomeIcon icon={faAngleDown} className="me-2" />
             Action
           </Dropdown.Toggle>
-          <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
+          <DropdownMenu>
             <Dropdown.Item className="fw-bold">
               <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" /> Add
               Feedback
@@ -149,7 +150,7 @@ function TableRow({ item, index, updateReport }) {
             >
               <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
             </Dropdown.Item>
-          </Dropdown.Menu>
+          </DropdownMenu>
         </Dropdown>
       </td>
     </tr>

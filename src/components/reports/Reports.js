@@ -9,6 +9,7 @@ import { REPORT, STATUS_APPROVE, STATUS_FORWARD } from "../../util/constants";
 import Actions from "../core/actions";
 import useModal from '../../hooks/core/useModal';
 import FeedbackForm from "./FeedbackForm";
+import DropdownMenu from '../core/DropdownMenu';
 
 function Reports() {
   const { reports, refresh, loading, refreshing } = useGetReports();
@@ -109,7 +110,7 @@ const TableRow = (props) => {
       </td>
       <td>{item.area.name}</td>
       <td>{item.created_on}</td>
-      <td>{item.status}</td>
+      <td>{item.status_display}</td>
       <td>
         <Dropdown className="btn-toolbar">
           <Dropdown.Toggle
@@ -121,7 +122,7 @@ const TableRow = (props) => {
             <FontAwesomeIcon icon={faAngleDown} className="me-2" />
             Action
           </Dropdown.Toggle>
-          <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
+          <DropdownMenu>
             <Dropdown.Item 
               className="fw-bold"
               onClick={() => handleFeedback(item.id)}
@@ -160,7 +161,7 @@ const TableRow = (props) => {
             >
               <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
             </Dropdown.Item>
-          </Dropdown.Menu>
+          </DropdownMenu>
         </Dropdown>
       </td>
     </tr>

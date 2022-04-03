@@ -28,6 +28,10 @@
   color: #61dafb;
 }
 
+.App-dropdown-menu {
+  transform: translate3d(-140px, 39px, 2px) !important;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

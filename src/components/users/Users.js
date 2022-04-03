@@ -1,7 +1,8 @@
 
 import React from "react";
+import { Form, InputGroup } from "@themesberg/react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelopeOpenText, faAngleDown, faFileArchive, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faEye, faSearch } from "@fortawesome/free-solid-svg-icons";
 import {
   Col,
   Row,
@@ -14,6 +15,7 @@ import useGetUsers from "../../hooks/account/useGetUsers";
 import Loader from "../core/Loader";
 import Actions from "../core/actions";
 import {ROLES, USER_STATUSES, USER_GENDER} from "../../util/constants";
+import DropdownMenu from '../core/DropdownMenu';
 
 function Users(){
 
@@ -45,7 +47,7 @@ function Users(){
                                         <FontAwesomeIcon icon={faAngleDown} className="me-2" />
                                         Status Filter
                                     </Dropdown.Toggle>
-                                    <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
+                                    <DropdownMenu>
                                         {
                                         USER_STATUSES.map(status=>(
                                             <Dropdown.Item className="fw-bold">
@@ -54,7 +56,7 @@ function Users(){
                                         ))
                                         }
                                         
-                                    </Dropdown.Menu>
+                                    </DropdownMenu>
                                 </Dropdown>
                                 <Dropdown>
                                     <Dropdown.Toggle
@@ -98,6 +100,14 @@ function Users(){
                                         
                                     </Dropdown.Menu>
                                 </Dropdown>
+
+                                <Form className="navbar-search">
+                                  <Form.Group id="topbarSearch">
+                                    <InputGroup className="input-group-merge search-bar">
+                                      <Form.Control type="text" placeholder="Search" />
+                                    </InputGroup>
+                                  </Form.Group>
+                                </Form>
                         </div>
                       </Col>
                     </Row>

@@ -1,47 +1,25 @@
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import SimpleBar from 'simplebar-react';
 import { useLocation } from "react-router-dom";
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBoxOpen, faBell, faHandHoldingUsd, faSignOutAlt,faTimes, faUser} from "@fortawesome/free-solid-svg-icons";
-import { Nav, Badge, Image, Button, Dropdown, Accordion, Navbar } from '@themesberg/react-bootstrap';
+import { Nav, Badge, Image, Button, Navbar } from '@themesberg/react-bootstrap';
 import { Link } from 'react-router-dom';
-
 import { Routes } from "../../util/routes";
 import ReactHero from "../../assets/img/technologies/react-hero-logo.svg";
 import ProfilePicture from "../../assets/img/team/profile-picture-3.jpg";
+import { canViewUsers } from '../../util/permissions';
+import { authContext } from '../../context/authContext';
 
 export default (props = {}) => {
   const location = useLocation();
   const { pathname } = location;
   const [show, setShow] = useState(false);
   const showClass = show ? "show" : "";
-
   const onCollapse = () => setShow(!show);
-
-  const CollapsableNavItem = (props) => {
-    const { eventKey, title, icon, children = null } = props;
-    const defaultKey = pathname.indexOf(eventKey) !== -1 ? eventKey : "";
-
-    return (
-      <Accordion as={Nav.Item} defaultActiveKey={defaultKey}>
-        <Accordion.Item eventKey={eventKey}>
-          <Accordion.Button as={Nav.Link} className="d-flex justify-content-between align-items-center">
-            <span>
-              <span className="sidebar-icon"><FontAwesomeIcon icon={icon} /> </span>
-              <span className="sidebar-text">{title}</span>
-            </span>
-          </Accordion.Button>
-          <Accordion.Body className="multi-level">
-            <Nav className="flex-column">
-              {children}
-            </Nav>
-          </Accordion.Body>
-        </Accordion.Item>
-      </Accordion>
-    );
-  };
+  const { user } = useContext(authContext);
 
   const NavItem = (props) => {
     const { title, link, external, target, icon, image, badgeText, badgeBg = "secondary", badgeColor = "primary" } = props;
@@ -100,7 +78,9 @@ export default (props = {}) => {
               <NavItem title="Incidents" icon={faHandHoldingUsd} link={Routes.Incidents.path} />
               <NavItem title="Reports" icon={faBoxOpen} link={Routes.reports.path} />
               <NavItem title="Notifications" link={Routes.Notifications.path} icon={faBell} />
-              <NavItem title="Users" link={Routes.Users.path} icon={faUser} />
+              {
+                canViewUsers(user)? <NavItem title="Users" link={Routes.Users.path} icon={faUser} />: null
+              }
 
             </Nav>
           </div>
