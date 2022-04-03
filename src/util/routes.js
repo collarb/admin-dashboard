@@ -4,6 +4,7 @@ export const Routes = {
   DashboardOverview: { path: "/dashboard/overview" },
   Incidents: { path: "/incidents" },
   Notifications: { path: "/notifications" },
+  Users: { path: "/users" },
 
   // pages
   Presentation: { path: "/" },
