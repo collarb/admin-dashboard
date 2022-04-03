@@ -7,7 +7,7 @@ import { INCIDENTS_API, REPORT_API } from "../../util/apis";
 function useUpdateStatus() {
   const [updating, setUpdating] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { openConfirm } = useModal();
+  const { openConfirm, closeModal } = useModal();
   const ajax = useFetch();
 
   const updateStatus = (type, title, id, status) => {
@@ -20,6 +20,7 @@ function useUpdateStatus() {
       }).then(data => {
           if(data) setSuccess(true);
           setUpdating(false);
+          closeModal();
       });
     });
   };

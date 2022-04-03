@@ -26,7 +26,7 @@ function ModalContextProvider({ children }) {
             onClick={() => setOpen(false)}
           />
         </Modal.Header>
-        {body}
+        <div style={{ padding: 15 }}>{body}</div>
       </Modal>
     </modalContext.Provider>
   );

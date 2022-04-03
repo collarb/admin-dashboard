@@ -7,3 +7,5 @@ export const LOCATION_API = `${BASE_API}location/`;
 export const OTP_API = `${BASE_API}profile/verify/`;
 export const REPORT_API = `${BASE_API}report/`;
 export const NOTIFICATIONS_API = `${BASE_API}notifications/`;
+export const DEPARTMENT_API = `${BASE_API}department/`;
+export const DESIGS_API = `${BASE_API}desgination/`;

@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import toast from "react-hot-toast";
 import { authContext } from "../../context/authContext";
-import { getAuthToken } from "../../util/storage";
+import { getAuthToken, deleteAuthToken } from "../../util/storage";
 
 function useFetch() {
   const { logout } = useContext(authContext);
@@ -28,6 +28,10 @@ function useFetch() {
       const resp = await fetch(api, params);
       if ((resp && resp.status === 200) || resp.status === 201) {
         return await resp.json(); // Return and exit the function
+      } else if(resp.status === 401) {
+        deleteAuthToken();
+        logout();
+
       } else {
         const data = await resp.json();
         const detail = data[Object.keys(data)[0]];

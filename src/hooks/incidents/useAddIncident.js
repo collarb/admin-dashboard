@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {INCIDENTS_API} from '../../util/apis';
 import useFetch from '../core/useFetch';
 
-function useAddIncident(navigation) {
+function useAddIncident() {
     const [submitting, setSubmitting] = useState(false);
     const ajax = useFetch();
 

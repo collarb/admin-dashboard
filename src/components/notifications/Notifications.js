@@ -1,7 +1,7 @@
 
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faBook, faEnvelopeOpenText, faUserShield, faAngleDown, faFileArchive, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelopeOpenText, faAngleDown, faFileArchive } from "@fortawesome/free-solid-svg-icons";
 import {
   Col,
   Row,
@@ -9,7 +9,6 @@ import {
   Dropdown,
   Card,
   Table,
-  ProgressBar,
 } from "@themesberg/react-bootstrap";
 import useNotifications from "../../hooks/notification/useNotifications";
 import Loader from "../core/Loader";
