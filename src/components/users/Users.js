@@ -13,6 +13,7 @@ import {
 import useGetUsers from "../../hooks/account/useGetUsers";
 import Loader from "../core/Loader";
 import Actions from "../core/actions";
+import {ROLES, USER_STATUSES, USER_GENDER} from "../../util/constants";
 
 function Users(){
 
@@ -32,6 +33,73 @@ function Users(){
                       <Col>
                         <h5>Users</h5>
                       </Col>
+                      <Col>
+                        <div className="d-flex flex-wrap flex-md-nowrap align-items-center py-4">
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        as={Button}
+                                        variant="success"
+                                        size="sm"
+                                        className="me-2"
+                                    >
+                                        <FontAwesomeIcon icon={faAngleDown} className="me-2" />
+                                        Status Filter
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
+                                        {
+                                        USER_STATUSES.map(status=>(
+                                            <Dropdown.Item className="fw-bold">
+                                            :{status[1]}
+                                            </Dropdown.Item>
+                                        ))
+                                        }
+                                        
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        as={Button}
+                                        variant="success"
+                                        size="sm"
+                                        className="me-2"
+                                    >
+                                        <FontAwesomeIcon icon={faAngleDown} className="me-2" />
+                                        Role Filter
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
+                                        {
+                                        ROLES.map(role=>(
+                                            <Dropdown.Item className="fw-bold">
+                                            :{role[1]}
+                                            </Dropdown.Item>
+                                        ))
+                                        }
+                                        
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        as={Button}
+                                        variant="success"
+                                        size="sm"
+                                        className="me-2"
+                                    >
+                                        <FontAwesomeIcon icon={faAngleDown} className="me-2" />
+                                        Gender Filter
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
+                                        {
+                                        USER_GENDER.map(gender=>(
+                                            <Dropdown.Item className="fw-bold">
+                                            :{gender[1]}
+                                            </Dropdown.Item>
+                                        ))
+                                        }
+                                        
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                        </div>
+                      </Col>
                     </Row>
                   </Card.Header>
                   <Card.Body className="pb-0">
@@ -48,7 +116,7 @@ function Users(){
                           <th className="border-0">Gender</th>
                           <th className="border-0">Role</th>
                           <th className="border-0">Member Since</th>
-                          <th className="border-0">Status</th>
+                          <th className="border-0">Actions</th>
                           <th className="border-0"></th>
                         </tr>
                       </thead>
@@ -92,22 +160,7 @@ function TableRow({item, index}) {
       <td>{item.display_role}</td>
       <td>{item.date_joined}</td>
       <td className="d-flex justify-content-between flex-wrap flex-md-nowrap">
-        <Dropdown className="btn-toolbar">
-          <Dropdown.Toggle
-            as={Button}
-            variant="success"
-            size="sm"
-            className="me-2"
-          >
-            <FontAwesomeIcon icon={faAngleDown} className="me-2" />
-            Action
-          </Dropdown.Toggle>
-          <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left">
-            <Dropdown.Item className="fw-bold">
-              <FontAwesomeIcon icon={faEye} className="me-2" /> View Details
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+        <a><FontAwesomeIcon icon={faEye} /> View Details</a>
       </td>
     </tr>
   );

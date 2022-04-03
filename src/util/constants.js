@@ -13,3 +13,13 @@ export const ROLES = [
     [4,"Deputy Director Transport"],
     [3,"Manager Transport"]
 ];
+
+export const USER_STATUSES = [
+    [1,"Active"],
+    [0,"Deactivated"],
+];
+
+export const USER_GENDER = [
+    ["male","Male"],
+    ["female","Female"],
+];
