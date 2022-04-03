@@ -10,6 +10,7 @@ import Container from './Container';
 import Notifications from '../notifications/Notifications';
 import ModalContextProvider from "../../context/ModalContext";
 import Loader from "../core/Loader";
+import Users from "../users/Users";
 
 
 function Router() {
@@ -20,12 +21,13 @@ function Router() {
   ) : loggedIn ? (
     <ModalContextProvider>
       <Container>
-      <Route exact path="/" component={Dashboard} />
-      <Route exact path={Routes.Incidents.path} component={Incidents} />
-      <Route exact path={Routes.reports.path} component={Reports} />
-      <Route exact path={Routes.Notifications.path} component={Notifications} />
-      <Redirect to="/" />
-    </Container>
+        <Route exact path="/" component={Dashboard} />
+        <Route exact path={Routes.Incidents.path} component={Incidents} />
+        <Route exact path={Routes.reports.path} component={Reports} />
+        <Route exact path={Routes.Notifications.path} component={Notifications} />
+        <Route exact path={Routes.Users.path} component={Users} />
+        <Redirect to="/" />
+      </Container>
     </ModalContextProvider>
   ) : (
     <>

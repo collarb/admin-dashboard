@@ -9,3 +9,4 @@ export const REPORT_API = `${BASE_API}report/`;
 export const NOTIFICATIONS_API = `${BASE_API}notifications/`;
 export const DEPARTMENT_API = `${BASE_API}department/`;
 export const DESIGS_API = `${BASE_API}desgination/`;
+export const USERS_API = `${BASE_API}users/`;
