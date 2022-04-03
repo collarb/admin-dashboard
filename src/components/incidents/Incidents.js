@@ -1,29 +1,17 @@
 import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEnvelopeOpenText,
-  faAngleDown,
-  faFileArchive,
-  faCheck,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  Col,
-  Row,
-  Button,
-  Dropdown,
-  Card,
-  Table,
-} from "@themesberg/react-bootstrap";
+import { faEnvelopeOpenText, faAngleDown, faFileArchive, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { Col, Row, Button, Dropdown, Card,Table } from "@themesberg/react-bootstrap";
 import useFetchIncidents from "../../hooks/incidents/useFetchIncidents";
 import Loader from "../core/Loader";
 import Actions from "../core/actions";
-import useUpdateStatus from "../../hooks/core/useUpdateStatus";
+import useUpdateReport from "../../hooks/reports/useUpdateReport";
 import { STATUS_APPROVE, STATUS_FORWARD } from "../../util/constants";
 import { INCIDENTS_API } from "../../util/apis";
 
 function Incidents() {
   const { loading, incidents, refresh } = useFetchIncidents();
-  const { updateStatus, success } = useUpdateStatus();
+  const { updateReport, success } = useUpdateReport();
 
   useEffect(() => {
     if (success) refresh();
@@ -73,7 +61,7 @@ function Incidents() {
                             key={`page-traffic-${pt.id}`}
                             item={pt}
                             index={index}
-                            updateStatus={updateStatus}
+                            updateReport={updateReport}
                           />
                         ))
                       )}
@@ -89,7 +77,7 @@ function Incidents() {
   );
 }
 
-function TableRow({ item, index, updateStatus }) {
+function TableRow({ item, index, updateReport }) {
   return (
     <tr>
       <td>
@@ -133,11 +121,13 @@ function TableRow({ item, index, updateStatus }) {
             <Dropdown.Item
               className="fw-bold"
               onClick={() =>
-                updateStatus(
+                updateReport(
                   INCIDENTS_API,
                   "Are you sure you want to approve this incident for approval?",
                   item.id,
-                  STATUS_FORWARD
+                  {
+                    status: STATUS_FORWARD
+                  }
                 )
               }
             >
@@ -147,11 +137,13 @@ function TableRow({ item, index, updateStatus }) {
             <Dropdown.Item
               className="fw-bold"
               onClick={() =>
-                updateStatus(
+                updateReport(
                   INCIDENTS_API,
                   "Are you sure you want to approve this incident?",
                   item.id,
-                  STATUS_APPROVE
+                  {
+                    status: STATUS_APPROVE
+                  }
                 )
               }
             >

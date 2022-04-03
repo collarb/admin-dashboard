@@ -1,35 +1,27 @@
 import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEnvelopeOpenText,
-  faAngleDown,
-  faFileArchive,
-  faCheck,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  Col,
-  Row,
-  Button,
-  Dropdown,
-  Card,
-  Table,
-} from "@themesberg/react-bootstrap";
-
+import { faEnvelopeOpenText, faAngleDown, faFileArchive, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { Col, Row, Button, Dropdown, Card, Table } from "@themesberg/react-bootstrap";
 import useGetReports from "../../hooks/reports/useGetReports";
 import Loader from "../core/Loader";
-import useUpdateStatus from "../../hooks/core/useUpdateStatus";
+import useUpdateReport from "../../hooks/reports/useUpdateReport";
 import { REPORT, STATUS_APPROVE, STATUS_FORWARD } from "../../util/constants";
 import Actions from "../core/actions";
+import useModal from '../../hooks/core/useModal';
+import FeedbackForm from "./FeedbackForm";
 
 function Reports() {
-
   const { reports, refresh, loading, refreshing } = useGetReports();
-  const { updateStatus, success } = useUpdateStatus();
+  const { updateReport, success } = useUpdateReport();
+  const { openModal } = useModal();
 
   useEffect(() => {
     if (success) refresh();
   }, [success]);
 
+  const handleFeedback = id => {
+    openModal(<FeedbackForm reportId={id} />, "Add Feedback")
+  }
 
   return (
     <>
@@ -74,7 +66,8 @@ function Reports() {
                             key={`page-traffic-${pt.id}`}
                             index={index}
                             item={pt}
-                            updateStatus={updateStatus}
+                            updateReport={updateReport}
+                            handleFeedback={handleFeedback}
                           />
                         ))
                       )}
@@ -91,7 +84,7 @@ function Reports() {
 }
 
 const TableRow = (props) => {
-  const { item, index, updateStatus } = props;
+  const { item, index, updateReport, handleFeedback } = props;
 
   return (
     <tr>
@@ -129,18 +122,23 @@ const TableRow = (props) => {
             Action
           </Dropdown.Toggle>
           <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
-            <Dropdown.Item className="fw-bold">
+            <Dropdown.Item 
+              className="fw-bold"
+              onClick={() => handleFeedback(item.id)}
+            >
               <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" /> Add
               Feedback
             </Dropdown.Item>
             <Dropdown.Item
               className="fw-bold"
               onClick={() =>
-                updateStatus(
+                updateReport(
                   REPORT,
                   "Are you sure you want to forward this report for review?",
                   item.id,
-                  STATUS_FORWARD
+                  {
+                    status: STATUS_FORWARD
+                  }
                 )
               }
             >
@@ -150,11 +148,13 @@ const TableRow = (props) => {
             <Dropdown.Item
               className="fw-bold"
               onClick={() =>
-                updateStatus(
+                updateReport(
                   REPORT,
                   "Are you sure you want to approve this report?",
                   item.id,
-                  STATUS_APPROVE
+                  {
+                    status: STATUS_APPROVE
+                  }
                 )
               }
             >
