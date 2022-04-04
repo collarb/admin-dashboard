@@ -22,8 +22,8 @@ function useAddUser() {
             position: "top-center",
             style: {
               minWidth: '40%',
-              backgroundColor: 'red',
-              color: colors.THEME_GREEN
+              backgroundColor: colors.THEME_GREEN,
+              color: 'white'
             }
           });
           setSuccess(true);

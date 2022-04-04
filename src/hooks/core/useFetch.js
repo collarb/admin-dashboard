@@ -28,6 +28,9 @@ function useFetch() {
       const resp = await fetch(api, params);
       if ((resp && resp.status === 200) || resp.status === 201) {
         return await resp.json(); // Return and exit the function
+       } else if(resp.status === 204) {
+        return true;
+
       } else if(resp.status === 401) {
         deleteAuthToken();
         logout();

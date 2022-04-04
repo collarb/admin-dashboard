@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Form, InputGroup } from "@themesberg/react-bootstrap";
+import PropTypes from 'prop-types';
 import useModal from "../../hooks/core/useModal";
 import useGetMasterData from "../../hooks/incidents/useGetMasterData";
 import Loader from "../core/Loader";
 import useAddReport from '../../hooks/reports/useAddReport';
 
-function ReportForm({refresh}) {
-  const [reportType, setReportType] = useState("");
-  const [division, setDivision] = useState("");
-  const [parish, setParish] = useState("");
-  const [village, setVillage] = useState("");
-  const [street, setStreet] = useState("");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [attachment, setAttachment] = useState(null);
+function ReportForm({edit, refresh, report}) {
+  const [reportType, setReportType] = useState(report.reportType);
+  const [division, setDivision] = useState(report.division);
+  const [parish, setParish] = useState(report.parish);
+  const [village, setVillage] = useState(report.village);
+  const [street, setStreet] = useState(report.street);
+  const [title, setTitle] = useState(report.title);
+  const [description, setDescription] = useState(report.description);
+  const [attachment, setAttachment] = useState(report.attachment);
   const {
     divisions,
     parishes,
@@ -96,12 +97,12 @@ function ReportForm({refresh}) {
     });
   };
 
-  if (loading) {
-    return <Loader />;
-  }
-
   return (
     <Form onSubmit={submit}>
+      {
+        loading && <Loader />
+      }
+
       <Form.Group className="mb-3">
         <Form.Label>Type</Form.Label>
         <Form.Select
@@ -214,6 +215,20 @@ function ReportForm({refresh}) {
       <ModalFooter />
     </Form>
   );
+}
+
+ReportForm.defaultProps = {
+  edit: false,
+  report: {
+    reportType: "",
+    division: "",
+    parish: "",
+    village: "",
+    street: "",
+    title: "",
+    description: "",
+    attachment: null,
+  }
 }
 
 export default ReportForm;

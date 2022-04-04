@@ -42,7 +42,31 @@ function useUpdateReport() {
     });
   }
 
-  return { updating, success, submitUpdate, updateReport };
+  const deleteReport = (title, id) => {
+    openConfirm(title, () => {
+      setUpdating(true);
+      ajax(`${REPORT_API}${id}/`, {
+        method: "DELETE",
+      }).then(data => {
+          setUpdating(false);
+          closeModal();
+          if(data) {
+            toast.success("Successfully deleted report", {
+              duration: 6000,
+              position: "top-center",
+              style: {
+                minWidth: '40%',
+                color: 'white',
+                backgroundColor: colors.THEME_GREEN
+              }
+            });
+            setSuccess(true)
+          };
+      });
+    });
+  };
+
+  return { updating, success, submitUpdate, updateReport, deleteReport };
 }
 
 export default useUpdateReport;

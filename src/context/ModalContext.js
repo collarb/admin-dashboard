@@ -18,7 +18,7 @@ function ModalContextProvider({ children }) {
         show={open}
         onHide={() => setOpen(false)}
       >
-        <Modal.Header>
+        <Modal.Header style={{borderBottom: "none"}}>
           <Modal.Title className="h6">{title}</Modal.Title>
           <Button
             variant="close"

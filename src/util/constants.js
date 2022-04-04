@@ -3,6 +3,7 @@ export const AUTH_KEY = `${BASE}GDYET73t282892gHDGG8&^@#&*@*@*`;
 export const STATUS_APPROVE = "complete";
 export const STATUS_FORWARD = "for_review";
 export const STATUS_REJECT= "reject";
+export const STATUS_COMPLETE = "complete";
 export const REPORT = "report";
 export const MALE = "male";
 export const FEMALE = "female";

@@ -51,6 +51,7 @@ function AccountForm() {
       username,
       email,
       gender,
+      role,
       password,
       profile: {
         mobile_number: mobile1,

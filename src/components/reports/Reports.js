@@ -1,32 +1,56 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelopeOpenText, faAngleDown, faFileArchive, faCheck } from "@fortawesome/free-solid-svg-icons";
-import { Col, Row, Button, Dropdown, Card, Table } from "@themesberg/react-bootstrap";
+import {
+  faEnvelopeOpenText,
+  faAngleDown,
+  faFileArchive,
+  faCheck,
+  faPencilAlt,
+  faTrash
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  Col,
+  Row,
+  Button,
+  Dropdown,
+  Card,
+  Table,
+} from "@themesberg/react-bootstrap";
 import useGetReports from "../../hooks/reports/useGetReports";
 import Loader from "../core/Loader";
 import useUpdateReport from "../../hooks/reports/useUpdateReport";
-import { REPORT, STATUS_APPROVE, STATUS_FORWARD } from "../../util/constants";
+import {
+  REPORT,
+  STATUS_APPROVE,
+  STATUS_COMPLETE,
+  STATUS_FORWARD,
+} from "../../util/constants";
 import Actions from "../core/actions";
-import useModal from '../../hooks/core/useModal';
+import useModal from "../../hooks/core/useModal";
 import FeedbackForm from "./FeedbackForm";
-import DropdownMenu from '../core/DropdownMenu';
+import DropdownMenu from "../core/DropdownMenu";
+import ReportForm from './ReportForm';
 
 function Reports() {
   const { reports, refresh, loading, refreshing } = useGetReports();
-  const { updateReport, success } = useUpdateReport();
+  const { updateReport, deleteReport, success } = useUpdateReport();
   const { openModal } = useModal();
 
   useEffect(() => {
     if (success) refresh();
   }, [success]);
 
-  const handleFeedback = id => {
-    openModal(<FeedbackForm reportId={id} />, "Add Feedback")
-  }
+  const handleFeedback = (id) => {
+    openModal(<FeedbackForm reportId={id} />, "Add Feedback");
+  };
+
+  const handleEditReport = (report) => {
+    openModal(<ReportForm report={report} edit={true} />, "Edit Report");
+  };
 
   return (
     <>
-      <Actions refresh={refresh}/>
+      <Actions refresh={refresh} />
       <Row>
         <Col xs={12} xl={12} className="mb-4">
           <Row>
@@ -68,7 +92,9 @@ function Reports() {
                             index={index}
                             item={pt}
                             updateReport={updateReport}
+                            deleteReport={deleteReport}
                             handleFeedback={handleFeedback}
+                            handleEditReport={handleEditReport}
                           />
                         ))
                       )}
@@ -85,7 +111,7 @@ function Reports() {
 }
 
 const TableRow = (props) => {
-  const { item, index, updateReport, handleFeedback } = props;
+  const { item, index, updateReport, deleteReport, handleFeedback, handleEditReport } = props;
 
   return (
     <tr>
@@ -123,7 +149,7 @@ const TableRow = (props) => {
             Action
           </Dropdown.Toggle>
           <DropdownMenu>
-            <Dropdown.Item 
+            <Dropdown.Item
               className="fw-bold"
               onClick={() => handleFeedback(item.id)}
             >
@@ -138,7 +164,7 @@ const TableRow = (props) => {
                   "Are you sure you want to forward this report for review?",
                   item.id,
                   {
-                    status: STATUS_FORWARD
+                    status: STATUS_FORWARD,
                   }
                 )
               }
@@ -154,13 +180,37 @@ const TableRow = (props) => {
                   "Are you sure you want to approve this report?",
                   item.id,
                   {
-                    status: STATUS_APPROVE
+                    status: STATUS_APPROVE,
                   }
                 )
               }
             >
               <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
             </Dropdown.Item>
+            {item.status !== STATUS_COMPLETE && (
+              <>
+                <Dropdown.Item
+                  className="fw-bold"
+                  onClick={() =>
+                    handleEditReport(item )
+                  }
+                >
+                  <FontAwesomeIcon icon={faPencilAlt} className="me-2" /> Edit
+                </Dropdown.Item>
+
+                <Dropdown.Item
+                  className="fw-bold"
+                  onClick={() =>
+                    deleteReport(
+                      "Are you sure you want to delete this report?",
+                      item.id,
+                    )
+                  }
+                >
+                  <FontAwesomeIcon icon={faTrash} className="me-2" /> Delete
+                </Dropdown.Item>
+              </>
+            )}
           </DropdownMenu>
         </Dropdown>
       </td>
