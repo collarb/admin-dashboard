@@ -1,7 +1,7 @@
 import {useState, useEffect, useContext} from 'react';
-import {authContext} from '../../context/AuthContext';
 import useFetch from '../core/useFetch';
 import {REPORT_API} from '../../util/apis';
+import { authContext } from '../../context/authContext';
 
 function useGetReport(reportId) {
     const [loading, setLoading] = useState(true);

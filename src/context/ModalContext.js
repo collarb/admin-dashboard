@@ -7,9 +7,10 @@ function ModalContextProvider({ children }) {
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState(null);
   const [title, setTitle] = useState(null);
+  const [size, setSize] = useState("sm");
 
   return (
-    <modalContext.Provider value={{ open, setOpen, setBody, setTitle }}>
+    <modalContext.Provider value={{ open, setOpen, setBody, setTitle, setSize }}>
       {children}
 
       <Modal
@@ -17,6 +18,7 @@ function ModalContextProvider({ children }) {
         centered
         show={open}
         onHide={() => setOpen(false)}
+        size={size}
       >
         <Modal.Header>
           <Modal.Title className="h6">{title}</Modal.Title>

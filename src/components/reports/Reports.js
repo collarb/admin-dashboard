@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelopeOpenText, faAngleDown, faFileArchive, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelopeOpenText, faAngleDown, faFileArchive, faCheck, faEye } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row, Button, Dropdown, Card, Table } from "@themesberg/react-bootstrap";
 import useGetReports from "../../hooks/reports/useGetReports";
 import Loader from "../core/Loader";
@@ -10,6 +10,7 @@ import Actions from "../core/actions";
 import useModal from '../../hooks/core/useModal';
 import FeedbackForm from "./FeedbackForm";
 import DropdownMenu from '../core/DropdownMenu';
+import ReportDetail from './ReportDetail';
 
 function Reports() {
   const { reports, refresh, loading, refreshing } = useGetReports();
@@ -22,6 +23,10 @@ function Reports() {
 
   const handleFeedback = id => {
     openModal(<FeedbackForm reportId={id} />, "Add Feedback")
+  }
+
+  const viewReportDetails = id => {
+    openModal(<ReportDetail reportId={id} />, "Report Details", {size: "lg"})
   }
 
   return (
@@ -60,7 +65,7 @@ function Reports() {
                       {loading || refreshing ? (
                         <Loader />
                       ) : reports.length === 0 ? (
-                        <div>No dara</div>
+                        <div>No Reports Yet</div>
                       ) : (
                         reports.map((pt, index) => (
                           <TableRow
@@ -69,6 +74,7 @@ function Reports() {
                             item={pt}
                             updateReport={updateReport}
                             handleFeedback={handleFeedback}
+                            viewReportDetails={viewReportDetails}
                           />
                         ))
                       )}
@@ -85,7 +91,7 @@ function Reports() {
 }
 
 const TableRow = (props) => {
-  const { item, index, updateReport, handleFeedback } = props;
+  const { item, index, updateReport, handleFeedback, viewReportDetails } = props;
 
   return (
     <tr>
@@ -123,6 +129,13 @@ const TableRow = (props) => {
             Action
           </Dropdown.Toggle>
           <DropdownMenu>
+          <Dropdown.Item 
+              className="fw-bold"
+              onClick={() => viewReportDetails(item.id)}
+            >
+              <FontAwesomeIcon icon={faEye} className="me-2" /> View
+              Details
+            </Dropdown.Item>
             <Dropdown.Item 
               className="fw-bold"
               onClick={() => handleFeedback(item.id)}

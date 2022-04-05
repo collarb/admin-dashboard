@@ -399,3 +399,137 @@ export const AcquisitionWidget = () => {
     </Card>
   );
 };
+
+
+export const ReportDetailWidget = ({data={},}) => {
+  return (
+    <Card border="light" className="shadow-sm">
+      <Card.Body>
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light pb-3">
+          <div>
+            <h6><FontAwesomeIcon icon={faGlobeEurope} className="icon icon-xs me-3" /> Type</h6>
+          </div>
+          <div>
+            <Card.Link href="#" className="text-primary fw-bold">
+            {data.type_display?data.type_display.name:"NIL"}
+            </Card.Link>
+          </div>
+        </div>
+
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+          <div>
+            <h6><FontAwesomeIcon icon={faGlobeEurope} className="icon icon-xs me-3" /> Subject</h6>
+          </div>
+          <div>
+            <Card.Link href="#" className="text-primary fw-bold">
+            {data.subject?data.subject:"NIL"}
+            </Card.Link>
+          </div>
+        </div>
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+          <div>
+            <h6><FontAwesomeIcon icon={faGlobeEurope} className="icon icon-xs me-3" /> Description</h6>
+          </div>
+          <div>
+            <Card.Link href="#" className="text-primary fw-bold">
+            {data.description?data.description:"NIL"}
+            </Card.Link>
+          </div>
+        </div>
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+          <div>
+            <h6><FontAwesomeIcon icon={faGlobeEurope} className="icon icon-xs me-3" /> Affected Area</h6>
+          </div>
+          <div>
+            <Card.Link href="#" className="text-primary fw-bold">
+            {data.area?.description?data.area.description:"NIL"}
+            </Card.Link>
+          </div>
+        </div>
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+          <div>
+            <h6><FontAwesomeIcon icon={faGlobeEurope} className="icon icon-xs me-3" /> Affected Area</h6>
+          </div>
+          <div>
+            <Card.Link href="#" className="text-primary fw-bold">
+            {data.area?.description?data.area.description:"NIL"}
+            </Card.Link>
+          </div>
+        </div>
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+          <div>
+            <h6><FontAwesomeIcon icon={faGlobeEurope} className="icon icon-xs me-3" /> Created On</h6>
+          </div>
+          <div>
+            <Card.Link href="#" className="text-primary fw-bold">
+            {data.created_on?data.created_on:"NIL"}
+            </Card.Link>
+          </div>
+        </div>
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+          <div>
+            <h6><FontAwesomeIcon icon={faGlobeEurope} className="icon icon-xs me-3" /> Status</h6>
+          </div>
+          <div>
+            <Card.Link href="#" className="text-primary fw-bold">
+            {data.status?data.status_display.toUpperCase():"NIL"}
+            </Card.Link>
+          </div>
+        </div>
+        <div className="d-flex align-items-center justify-content-between py-3">
+          <div>
+            <h6><FontAwesomeIcon icon={faGlobeEurope} className="icon icon-xs me-3" /> Published</h6>
+          </div>
+          <div>
+            <Card.Link href="#" className="text-primary fw-bold">
+              {data?.published?"YES":"NO"}
+            </Card.Link>
+          </div>
+        </div>
+
+        {
+          data?.published && <>
+                    <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+                        <div>
+                          <h6><FontAwesomeIcon icon={faGlobeEurope} className="icon icon-xs me-3" /> Views</h6>
+                        </div>
+                        <div>
+                          <Card.Link href="#" className="text-primary fw-bold">
+                            {data?.views_count}
+                          </Card.Link>
+                        </div>
+                    </div>
+                    <div className="d-flex align-items-center justify-content-between py-3">
+                        <div>
+                          <h6><FontAwesomeIcon icon={faGlobeEurope} className="icon icon-xs me-3" /> Likes</h6>
+                        </div>
+                        <div>
+                          <Card.Link href="#" className="text-primary fw-bold">
+                            {data?.thumbs_up}
+                          </Card.Link>
+                        </div>
+                    </div>
+                            </>
+        }
+        
+      </Card.Body>
+    </Card>
+  );
+};
+
+
+export const AttachementPreviewWidget = ({title,attachment}) => {
+ 
+  return (
+    <Card border="light" className="shadow-sm">
+      <Card.Body className="d-flex flex-row align-items-center flex-0 border-bottom">
+        <div className="d-block">
+          <h6 className="fw-normal text-gray mb-2">{title}</h6>
+        </div>
+      </Card.Body>
+      <Card.Body className="p-2">
+        <Image src={attachment} />
+      </Card.Body>
+    </Card>
+  );
+};
