@@ -1,24 +1,26 @@
 import React, { useState } from "react";
 import { Row, Col } from "@themesberg/react-bootstrap";
 import useGetReport from '../../hooks/reports/useGetReport';
+import Loader from "../core/Loader";
 
 import { ReportDetailWidget, AttachementPreviewWidget } from '../core/Widgets';
 
 function ReportDetail({ reportId }) {
-    // const [feedback, setFeedback] = useState("");
-    // const { submitUpdate } = useUpdateReport();
-    // const { ModalFooter } = useModal();
+    const { loading, report } = useGetReport(reportId);
     
     return ( 
+        loading?
+        <Loader/>:
         <Row>
-            <Col xs={12} xl={4} className="mb-4">
+            <Col xs={12} xl={5}>
+
                 <AttachementPreviewWidget
-                    title="Report Attachemnt"
-                    attachment = ""
+                    title="Report Attachment"
+                    attachment = {report.attachment}
                 />
             </Col>
-            <Col xs={12} xl={8}>
-                <ReportDetailWidget/>
+            <Col xs={12} xl={7}>
+                <ReportDetailWidget data={report}/>
             </Col>
         </Row>
     );

@@ -1,18 +1,34 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelopeOpenText, faAngleDown, faFileArchive, faCheck, faEye } from "@fortawesome/free-solid-svg-icons";
-import { Col, Row, Button, Dropdown, Card, Table } from "@themesberg/react-bootstrap";
+import {
+  faEnvelopeOpenText,
+  faAngleDown,
+  faFileArchive,
+  faCheck,
+  faEye,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  Col,
+  Row,
+  Button,
+  Dropdown,
+  Card,
+  Table,
+} from "@themesberg/react-bootstrap";
 import useGetReports from "../../hooks/reports/useGetReports";
 import Loader from "../core/Loader";
 import useUpdateReport from "../../hooks/reports/useUpdateReport";
-import { REPORT, STATUS_APPROVE, STATUS_FORWARD } from "../../util/constants";
+import { REPORT, STATUS_APPROVE, STATUS_FORWARD, STATUS_APPROVE_DISPLAY, 
+  STATUS_REJECT_DISPLAY, STATUS_FORWARD_DISPLAY } from "../../util/constants";
 import Actions from "../core/actions";
-import useModal from '../../hooks/core/useModal';
+import useModal from "../../hooks/core/useModal";
 import FeedbackForm from "./FeedbackForm";
-import DropdownMenu from '../core/DropdownMenu';
-import ReportDetail from './ReportDetail';
+import DropdownMenu from "../core/DropdownMenu";
+import ReportDetail from "./ReportDetail";
+import { userContext } from "../../context/userContext";
 
 function Reports() {
+  const { user } = useContext(userContext);
   const { reports, refresh, loading, refreshing } = useGetReports();
   const { updateReport, success } = useUpdateReport();
   const { openModal } = useModal();
@@ -21,17 +37,17 @@ function Reports() {
     if (success) refresh();
   }, [success]);
 
-  const handleFeedback = id => {
-    openModal(<FeedbackForm reportId={id} />, "Add Feedback")
-  }
+  const handleFeedback = (id) => {
+    openModal(<FeedbackForm reportId={id} />, "Add Feedback");
+  };
 
-  const viewReportDetails = id => {
-    openModal(<ReportDetail reportId={id} />, "Report Details", {size: "lg"})
-  }
+  const viewReportDetails = (id) => {
+    openModal(<ReportDetail reportId={id} />, "Report Details", { size: "xl" });
+  };
 
   return (
     <>
-      <Actions refresh={refresh}/>
+      <Actions refresh={refresh} />
       <Row>
         <Col xs={12} xl={12} className="mb-4">
           <Row>
@@ -75,6 +91,7 @@ function Reports() {
                             updateReport={updateReport}
                             handleFeedback={handleFeedback}
                             viewReportDetails={viewReportDetails}
+                            user={user}
                           />
                         ))
                       )}
@@ -91,7 +108,14 @@ function Reports() {
 }
 
 const TableRow = (props) => {
-  const { item, index, updateReport, handleFeedback, viewReportDetails } = props;
+  const {
+    item,
+    index,
+    updateReport,
+    handleFeedback,
+    viewReportDetails,
+    user
+  } = props;
 
   return (
     <tr>
@@ -129,51 +153,60 @@ const TableRow = (props) => {
             Action
           </Dropdown.Toggle>
           <DropdownMenu>
-          <Dropdown.Item 
+            <Dropdown.Item
               className="fw-bold"
               onClick={() => viewReportDetails(item.id)}
             >
-              <FontAwesomeIcon icon={faEye} className="me-2" /> View
-              Details
+              <FontAwesomeIcon icon={faEye} className="me-2" /> View Details
             </Dropdown.Item>
-            <Dropdown.Item 
-              className="fw-bold"
-              onClick={() => handleFeedback(item.id)}
-            >
-              <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" /> Add
-              Feedback
-            </Dropdown.Item>
-            <Dropdown.Item
-              className="fw-bold"
-              onClick={() =>
-                updateReport(
-                  REPORT,
-                  "Are you sure you want to forward this report for review?",
-                  item.id,
-                  {
-                    status: STATUS_FORWARD
-                  }
-                )
-              }
-            >
-              <FontAwesomeIcon icon={faFileArchive} className="me-2" /> Forward
-              For Review
-            </Dropdown.Item>
-            <Dropdown.Item
-              className="fw-bold"
-              onClick={() =>
-                updateReport(
-                  REPORT,
-                  "Are you sure you want to approve this report?",
-                  item.id,
-                  {
-                    status: STATUS_APPROVE
-                  }
-                )
-              }
-            >
-              <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
-            </Dropdown.Item>
+            {
+              user.is_manager &&
+              <Dropdown.Item
+                className="fw-bold"
+                onClick={() => handleFeedback(item.id)}
+              >
+                <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" /> Add
+                Feedback
+              </Dropdown.Item>
+            }
+            
+            {
+              user.is_data_entrant && !([STATUS_FORWARD_DISPLAY, STATUS_APPROVE_DISPLAY].includes(item.status_display)) &&
+              <Dropdown.Item
+                className="fw-bold"
+                onClick={() =>
+                  updateReport(
+                    REPORT,
+                    "Are you sure you want to forward this report for review?",
+                    item.id,
+                    {
+                      status: STATUS_FORWARD,
+                    }
+                  )
+                }
+              >
+                <FontAwesomeIcon icon={faFileArchive} className="me-2" /> Forward
+                For Review
+              </Dropdown.Item>
+            }
+            {
+              user.is_manager &&
+              <Dropdown.Item
+                className="fw-bold"
+                onClick={() =>
+                  updateReport(
+                    REPORT,
+                    "Are you sure you want to approve this report?",
+                    item.id,
+                    {
+                      status: STATUS_APPROVE,
+                    }
+                  )
+                }
+              >
+                <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
+              </Dropdown.Item>
+            }
           </DropdownMenu>
         </Dropdown>
       </td>

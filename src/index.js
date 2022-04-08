@@ -10,6 +10,9 @@ import "./scss/volt.scss";
 // vendor styles
 import "react-datetime/css/react-datetime.css";
 
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import '@react-pdf-viewer/full-screen/lib/styles/index.css';
+
 ReactDOM.render(
   <React.StrictMode>
     <App />
