@@ -190,7 +190,7 @@ const TableRow = (props) => {
               </Dropdown.Item>
             }
             {
-              user.is_manager &&
+              user.is_manager && !([STATUS_APPROVE_DISPLAY].includes(item.status_display)) &&
               <Dropdown.Item
                 className="fw-bold"
                 onClick={() =>
