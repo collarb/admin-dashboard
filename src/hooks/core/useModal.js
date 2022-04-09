@@ -3,12 +3,13 @@ import { modalContext } from "../../context/ModalContext";
 import { Button, Modal } from "@themesberg/react-bootstrap";
 
 function useModal() {
-  const { setOpen, setBody, setTitle } = useContext(modalContext);
+  const { setOpen, setBody, setTitle, setSize } = useContext(modalContext);
 
-  const openModal = (body, title) => {
+  const openModal = (body, title, options={}) => {
     setOpen(true);
     setBody(body);
     setTitle(title);
+    setSize(options.size || "sm");
   };
 
   const openConfirm = (title, confirm) => {
