@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelopeOpenText, faAngleDown, faFileArchive, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelopeOpenText, faAngleDown, faFileArchive, faCheck, faForward, faBackward } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row, Button, Dropdown, Card,Table } from "@themesberg/react-bootstrap";
+import ReactPaginate from 'react-paginate';
 import useFetchIncidents from "../../hooks/incidents/useFetchIncidents";
 import Loader from "../core/Loader";
 import Actions from "../core/actions";
@@ -11,7 +12,7 @@ import { INCIDENTS_API } from "../../util/apis";
 import DropdownMenu from '../core/DropdownMenu';
 
 function Incidents() {
-  const { loading, incidents, refresh } = useFetchIncidents();
+  const { loading, incidents, refresh, pageCount, itemsPerPage, page, onPageChange } = useFetchIncidents();
   const { updateReport, success } = useUpdateReport();
 
   useEffect(() => {
@@ -68,8 +69,30 @@ function Incidents() {
                       )}
                     </tbody>
                   </Table>
+                  
                 </Card.Body>
               </Card>
+
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel={<FontAwesomeIcon icon={faForward} className="me-2" />}
+                onPageChange={event => onPageChange(event.selected)}
+                pageRangeDisplayed={5}
+                pageCount={Math.ceil(pageCount / itemsPerPage)}
+                previousLabel={<FontAwesomeIcon icon={faBackward} className="me-2" />}
+                renderOnZeroPageCount={null}
+                forcePage={page}
+                containerClassName={"pagination justify-content-end"}
+                pageClassName={"page-item"}
+                pageLinkClassName={"page-link"}
+                previousClassName={"page-item"}
+                previousLinkClassName={"page-link"}
+                nextClassName={"page-item"}
+                nextLinkClassName={"page-link"}
+                activeClassName={"active"}
+                breakClassName={"pafaArrowRightge-item"}
+                breakLinkClassName={"page-link"}
+              />
             </Col>
           </Row>
         </Col>

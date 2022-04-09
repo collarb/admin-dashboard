@@ -1,5 +1,7 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faForward, faBackward } from "@fortawesome/free-solid-svg-icons";
+import ReactPaginate from 'react-paginate';
 import {
   faEnvelopeOpenText,
   faAngleDown,
@@ -32,7 +34,7 @@ import DropdownMenu from "../core/DropdownMenu";
 import ReportForm from './ReportForm';
 
 function Reports() {
-  const { reports, refresh, loading, refreshing } = useGetReports();
+  const { reports, refresh, loading, refreshing, pageCount, itemsPerPage, page, onPageChange } = useGetReports();
   const { updateReport, deleteReport, success } = useUpdateReport();
   const { openModal } = useModal();
 
@@ -102,6 +104,27 @@ function Reports() {
                   </Table>
                 </Card.Body>
               </Card>
+
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel={<FontAwesomeIcon icon={faForward} className="me-2" />}
+                onPageChange={event => onPageChange(event.selected)}
+                pageRangeDisplayed={5}
+                pageCount={Math.ceil(pageCount / itemsPerPage)}
+                previousLabel={<FontAwesomeIcon icon={faBackward} className="me-2" />}
+                renderOnZeroPageCount={null}
+                forcePage={page}
+                containerClassName={"pagination justify-content-end"}
+                pageClassName={"page-item"}
+                pageLinkClassName={"page-link"}
+                previousClassName={"page-item"}
+                previousLinkClassName={"page-link"}
+                nextClassName={"page-item"}
+                nextLinkClassName={"page-link"}
+                activeClassName={"active"}
+                breakClassName={"pafaArrowRightge-item"}
+                breakLinkClassName={"page-link"}
+              />
             </Col>
           </Row>
         </Col>

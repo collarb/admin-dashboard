@@ -2,7 +2,7 @@
 import React from "react";
 import { Form, InputGroup } from "@themesberg/react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faEye, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faEye, faForward, faBackward } from "@fortawesome/free-solid-svg-icons";
 import {
   Col,
   Row,
@@ -11,6 +11,7 @@ import {
   Card,
   Table,
 } from "@themesberg/react-bootstrap";
+import ReactPaginate from 'react-paginate';
 import useGetUsers from "../../hooks/account/useGetUsers";
 import Loader from "../core/Loader";
 import Actions from "../core/actions";
@@ -19,7 +20,7 @@ import DropdownMenu from '../core/DropdownMenu';
 
 function Users(){
 
-    const {loading, users} = useGetUsers();
+    const {loading, users, pageCount, itemsPerPage, page, onPageChange} = useGetUsers();
 
     return (
       <>
@@ -148,6 +149,27 @@ function Users(){
             </Row>
           </Col>
         </Row>
+
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel={<FontAwesomeIcon icon={faForward} className="me-2" />}
+          onPageChange={event => onPageChange(event.selected)}
+          pageRangeDisplayed={5}
+          pageCount={Math.ceil(pageCount / itemsPerPage)}
+          previousLabel={<FontAwesomeIcon icon={faBackward} className="me-2" />}
+          renderOnZeroPageCount={null}
+          forcePage={page}
+          containerClassName={"pagination justify-content-end"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextClassName={"page-item"}
+          nextLinkClassName={"page-link"}
+          activeClassName={"active"}
+          breakClassName={"pafaArrowRightge-item"}
+          breakLinkClassName={"page-link"}
+        />
       </>
     );
 
