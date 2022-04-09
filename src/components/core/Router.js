@@ -7,6 +7,7 @@ import Login from '../account/Login';
 import { Routes } from '../../util/routes';
 import Reports from "../reports/Reports";
 import ReportDetailPage from "../reports/ReportDetailPage";
+import IncidentDetailPage from "../incidents/IncidentDetailPage";
 import Container from './Container';
 import Notifications from '../notifications/Notifications';
 import ModalContextProvider from "../../context/ModalContext";
@@ -24,6 +25,7 @@ function Router() {
       <Container>
         <Route exact path="/" component={Dashboard} />
         <Route exact path={Routes.Incidents.path} component={Incidents} />
+        <Route path={Routes.IncidentDetail.path} component={IncidentDetailPage} />
         <Route exact path={Routes.reports.path} component={Reports} />
         <Route path={Routes.reportDetail.path} component={ReportDetailPage} />
         <Route exact path={Routes.Notifications.path} component={Notifications} />

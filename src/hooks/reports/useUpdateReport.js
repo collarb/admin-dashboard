@@ -28,7 +28,7 @@ function useUpdateReport() {
         setUpdating(false);
         closeModal();
         if(data) {
-          toast.success("Successfully updated report", {
+          toast.success(`${type==REPORT?"Report":"Incident"} Updated Successfully`, {
             duration: 6000,
             position: "top-center",
             style: {

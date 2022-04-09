@@ -33,6 +33,7 @@ import {
   STATUS_REJECT_DISPLAY,
   STATUS_FORWARD_DISPLAY,
   STATUS_REJECT,
+  STATUS_PENDING_DISPLAY,
 } from "../../util/constants";
 import Actions from "../core/actions";
 import useModal from "../../hooks/core/useModal";
@@ -62,11 +63,13 @@ function Reports() {
   }, [success]);
 
   const handleFeedback = (id) => {
-    openModal(<FeedbackForm reportId={id} />, "Add Feedback");
+    openModal(<FeedbackForm reportId={id} type={REPORT} />, "Add Feedback");
   };
 
   const handleEditReport = (report) => {
-    openModal(<ReportForm report={report} edit={true} />, "Edit Report",{ size: "lg" });
+    openModal(<ReportForm report={report} edit={true} />, "Edit Report", {
+      size: "lg",
+    });
   };
   const viewReportDetails = (id) => {
     openModal(<ReportDetail reportId={id} />, "Report Details", { size: "xl" });
@@ -96,7 +99,7 @@ function Reports() {
                       <tr>
                         <th className="border-0">#</th>
                         <th className="border-0">Type</th>
-                        <th className="border-0">Ref NO.</th>
+                        <th className="border-0">Reference NO.</th>
                         <th className="border-0">Subject</th>
                         <th className="border-0">Description</th>
                         <th className="border-0">Affected Area</th>
@@ -215,60 +218,61 @@ const TableRow = (props) => {
             Action
           </Dropdown.Toggle>
           <DropdownMenu>
+            {/* view details */}
             <Dropdown.Item
               className="fw-bold"
               onClick={() => viewReportDetails(item.id)}
             >
               <FontAwesomeIcon icon={faEye} className="me-2" /> View Details
             </Dropdown.Item>
-            <Dropdown.Item
-              className="fw-bold"
-              onClick={() =>
-                updateReport(
-                  REPORT,
-                  "Are you sure you want to approve this report?",
-                  item.id,
-                  {
-                    status: STATUS_APPROVE,
-                  }
-                )
-              }
-            >
-              <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
-            </Dropdown.Item>
-            {![STATUS_APPROVE_DISPLAY].includes(item.status_display) && (
-              <>
-                <Dropdown.Item
-                  className="fw-bold"
-                  onClick={() => handleEditReport(item)}
-                >
-                  <FontAwesomeIcon icon={faPencilAlt} className="me-2" /> Edit
-                </Dropdown.Item>
 
-                <Dropdown.Item
-                  className="fw-bold"
-                  onClick={() =>
-                    deleteReport(
-                      "Are you sure you want to delete this report?",
-                      item.id
-                    )
-                  }
-                >
-                  <FontAwesomeIcon icon={faTrash} className="me-2" /> Delete
-                </Dropdown.Item>
+            {!item.published && (
+              <>
+                {
+                  // edit and delete
+                  ((user.is_data_entrant &&
+                    item.status_display != STATUS_APPROVE_DISPLAY) ||
+                    user.is_manager ||
+                    user.is_ddt) && (
+                    <>
+                      <Dropdown.Item
+                        className="fw-bold"
+                        onClick={() => handleEditReport(item)}
+                      >
+                        <FontAwesomeIcon icon={faPencilAlt} className="me-2" />{" "}
+                        Edit
+                      </Dropdown.Item>
+
+                      <Dropdown.Item
+                        className="fw-bold"
+                        onClick={() =>
+                          deleteReport(
+                            "Are you sure you want to delete this report?",
+                            item.id
+                          )
+                        }
+                      >
+                        <FontAwesomeIcon icon={faTrash} className="me-2" />{" "}
+                        Delete
+                      </Dropdown.Item>
+                    </>
+                  )
+                }
               </>
             )}
-            {user.is_manager &&
-              [STATUS_FORWARD_DISPLAY].includes(item.status_display) && (
-                <Dropdown.Item
-                  className="fw-bold"
-                  onClick={() => handleFeedback(item.id)}
-                >
-                  <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" />
-                  Add Feedback
-                </Dropdown.Item>
-              )}
 
+            {/* add feedback */}
+            {user.is_manager && item.status_display == STATUS_FORWARD_DISPLAY && (
+              <Dropdown.Item
+                className="fw-bold"
+                onClick={() => handleFeedback(item.id)}
+              >
+                <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" />
+                Add Feedback
+              </Dropdown.Item>
+            )}
+
+            {/* forward for review */}
             {user.is_data_entrant &&
               ![STATUS_FORWARD_DISPLAY, STATUS_APPROVE_DISPLAY].includes(
                 item.status_display
@@ -290,8 +294,10 @@ const TableRow = (props) => {
                   Forward For Review
                 </Dropdown.Item>
               )}
+
+            {/* reject */}
             {(user.is_manager || user.is_ddt) &&
-              [STATUS_FORWARD_DISPLAY].includes(item.status_display) && (
+              item.status_display == STATUS_FORWARD_DISPLAY && (
                 <Dropdown.Item
                   className="fw-bold"
                   onClick={() =>
@@ -309,8 +315,9 @@ const TableRow = (props) => {
                   Reject
                 </Dropdown.Item>
               )}
-            {user.is_manager &&
-              ![STATUS_APPROVE_DISPLAY].includes(item.status_display) && (
+
+              {/* approve */}
+            {user.is_manager && item.status_display != STATUS_APPROVE_DISPLAY && (
                 <Dropdown.Item
                   className="fw-bold"
                   onClick={() =>
@@ -327,9 +334,10 @@ const TableRow = (props) => {
                   <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
                 </Dropdown.Item>
               )}
+
+              {/* publish */}
             {(user.is_manager || user.is_ddt) &&
-              !item.published &&
-              [STATUS_APPROVE_DISPLAY].includes(item.status_display) && (
+              !item.published && item.status_display == STATUS_APPROVE_DISPLAY && (
                 <Dropdown.Item
                   className="fw-bold"
                   onClick={() =>
@@ -346,6 +354,8 @@ const TableRow = (props) => {
                   <FontAwesomeIcon icon={faCheck} className="me-2" /> Publish
                 </Dropdown.Item>
               )}
+
+              {/* unpublish */}
             {(user.is_manager || user.is_ddt) && item.published && (
               <Dropdown.Item
                 className="fw-bold"

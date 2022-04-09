@@ -14,16 +14,18 @@ import {
   Button,
   Dropdown,
   Card,
-  Table
+  Table,
 } from "@themesberg/react-bootstrap";
 import useNotifications from "../../hooks/notification/useNotifications";
 import Loader from "../core/Loader";
 import Actions from "../core/actions";
 import DropdownMenu from "../core/DropdownMenu";
 import {
-  INCIDENT_NOTIFICATION, REPORT_NOTIFICATION
+  INCIDENT_NOTIFICATION,
+  REPORT_NOTIFICATION,
 } from "../../util/constants";
 import { Link } from "react-router-dom";
+import Moment from "react-moment";
 
 function Notifications() {
   const { loading, notifications } = useNotifications();
@@ -93,9 +95,9 @@ function TableRow({ item, index }) {
         </Card.Link>
       </td>
       <td>{item.description ? item.description : "--"}</td>
-      <td>{item.timestamp}</td>
-      <td>{item.unread? "Unread" : "Read"}</td>
-      <td className="d-flex justify-content-between flex-wrap flex-md-nowrap">
+      <td><Moment format="ddd, Do MMM YYYY">{item.timestamp}</Moment></td>
+      <td>{item.unread ? "Unread" : "Read"}</td>
+      <td>
         <Dropdown className="btn-toolbar">
           <Dropdown.Toggle
             as={Button}
@@ -107,30 +109,31 @@ function TableRow({ item, index }) {
             Action
           </Dropdown.Toggle>
           <DropdownMenu className="dashboard-dropdown dropdown-menu-left">
-            {
-              item.activity_type == INCIDENT_NOTIFICATION?
+            {item.activity_type == INCIDENT_NOTIFICATION ? (
               <Dropdown.Item className="fw-bold">
                 <FontAwesomeIcon icon={faEye} className="me-2" />
-                <Link to={"/incidents/"+item.activity.id}>Incident Details</Link>
-              </Dropdown.Item>:
-              <Dropdown.Item className="fw-bold">
-                <FontAwesomeIcon icon={faEye} className="me-2" />
-                <Link to={"/reports/"+item.activity.id}>Report Details</Link>
+                <Link to={"/incidents/" + item.activity.id}>
+                  Incident Details
+                </Link>
               </Dropdown.Item>
-            }
-            {
-              item.unread && <Dropdown.Item className="fw-bold">
-                              <FontAwesomeIcon icon={faCheck} className="me-2" />
-                              Mark As Read
-                            </Dropdown.Item>
-            }
-            {
-              !item.unread && <Dropdown.Item className="fw-bold">
-                                <FontAwesomeIcon icon={faBookReader} className="me-2" /> Mark As
-                                UnRead
-                              </Dropdown.Item>
-            }
-            
+            ) : (
+              <Dropdown.Item className="fw-bold">
+                <FontAwesomeIcon icon={faEye} className="me-2" />
+                <Link to={"/reports/" + item.activity.id}>Report Details</Link>
+              </Dropdown.Item>
+            )}
+            {item.unread && (
+              <Dropdown.Item className="fw-bold">
+                <FontAwesomeIcon icon={faCheck} className="me-2" />
+                Mark As Read
+              </Dropdown.Item>
+            )}
+            {!item.unread && (
+              <Dropdown.Item className="fw-bold">
+                <FontAwesomeIcon icon={faBookReader} className="me-2" /> Mark As
+                UnRead
+              </Dropdown.Item>
+            )}
           </DropdownMenu>
         </Dropdown>
       </td>

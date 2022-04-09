@@ -51,7 +51,7 @@ import teamMembers from "../../data/teamMembers";
 import { Worker } from "@react-pdf-viewer/core";
 import { Viewer } from "@react-pdf-viewer/core";
 import { fullScreenPlugin } from "@react-pdf-viewer/full-screen";
-import Moment from 'react-moment';
+import Moment from "react-moment";
 
 export const ProfileCardWidget = () => {
   return (
@@ -616,7 +616,9 @@ export const ReportDetailWidget = ({ data = {} }) => {
           </div>
           <div>
             <Card.Link href="#" className="text-primary">
-              <Moment format="ddd, Do MMM YYYY">{data.created_on ? data.created_on : "NIL"}</Moment>
+              <Moment format="ddd, Do MMM YYYY">
+                {data.created_on ? data.created_on : "NIL"}
+              </Moment>
             </Card.Link>
           </div>
         </div>
@@ -655,10 +657,7 @@ export const ReportDetailWidget = ({ data = {} }) => {
             <div className="d-flex align-items-center justify-content-between border-bottom border-top border-light py-3">
               <div>
                 <h6>
-                  <FontAwesomeIcon
-                    icon={faEye}
-                    className="icon icon-xs me-3"
-                  />
+                  <FontAwesomeIcon icon={faEye} className="icon icon-xs me-3" />
                   Views
                 </h6>
               </div>
@@ -688,22 +687,143 @@ export const ReportDetailWidget = ({ data = {} }) => {
         )}
 
         <div className="d-flex align-items-center justify-content-between border-top border-light py-3">
-                  <div>
-                    <h6>
-                      <FontAwesomeIcon
-                        icon={faStickyNote}
-                        className="icon icon-xs me-3"
-                      />
-                      Feedback
-                    </h6>
-                    <div className="align-items-center">
-                      <Card.Link href="#" className="text-primary">
-                        {data.feedback ? data.feedback : "NIL"}
-                      </Card.Link>
-                    </div>
-                  </div>
+          <div>
+            <h6>
+              <FontAwesomeIcon
+                icon={faStickyNote}
+                className="icon icon-xs me-3"
+              />
+              Feedback
+            </h6>
+            <div className="align-items-center">
+              <Card.Link href="#" className="text-primary">
+                {data.feedback ? data.feedback : "NIL"}
+              </Card.Link>
+            </div>
+          </div>
         </div>
-        
+      </Card.Body>
+    </Card>
+  );
+};
+
+export const IncidentDetailWidget = ({ data = {} }) => {
+  return (
+    <Card border="light" className="shadow-sm">
+      <Card.Body>
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light pb-3">
+          <div>
+            <h6>
+              <FontAwesomeIcon
+                icon={faFolderOpen}
+                className="icon icon-xs me-3"
+              />
+              Type
+            </h6>
+          </div>
+          <div>
+            <Card.Link href="#" className="text-primary">
+              {data.type_display ? data.type_display.name : "NIL"}
+            </Card.Link>
+          </div>
+        </div>
+
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+          <div>
+            <h6>
+              <FontAwesomeIcon icon={faPaste} className="icon icon-xs me-3" />
+              Subject
+            </h6>
+            <div className="align-items-center">
+              <Card.Link href="#" className="text-primary">
+                {data.subject ? data.subject : "NIL"}
+              </Card.Link>
+            </div>
+          </div>
+        </div>
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+          <div>
+            <h6>
+              <FontAwesomeIcon
+                icon={faStickyNote}
+                className="icon icon-xs me-3"
+              />
+              Description
+            </h6>
+            <div className="align-items-center">
+              <Card.Link href="#" className="text-primary">
+                {data.description ? data.description : "NIL"}
+              </Card.Link>
+            </div>
+          </div>
+        </div>
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+          <div>
+            <h6>
+              <FontAwesomeIcon
+                icon={faMapMarker}
+                className="icon icon-xs me-3"
+              />
+              Affected Area
+            </h6>
+            <div className="align-items-center">
+              <Card.Link href="#" className="text-primary">
+                {data.area?.description ? data.area.description : "NIL"}
+              </Card.Link>
+            </div>
+          </div>
+        </div>
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+          <div>
+            <h6>
+              <FontAwesomeIcon
+                icon={faCalendar}
+                className="icon icon-xs me-3"
+              />
+              Reported On
+            </h6>
+          </div>
+          <div>
+            <Card.Link href="#" className="text-primary">
+              <Moment format="ddd, Do MMM YYYY">
+                {data.created_on ? data.created_on : "NIL"}
+              </Moment>
+            </Card.Link>
+          </div>
+        </div>
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+          <div>
+            <h6>
+              <FontAwesomeIcon
+                icon={faHourglass}
+                className="icon icon-xs me-3"
+              />
+              Status
+            </h6>
+          </div>
+          <div>
+            <Card.Link href="#" className="text-primary">
+              {data.status_display ? data.status_display.toUpperCase() : "NIL"}
+            </Card.Link>
+          </div>
+        </div>
+
+        <div className="d-flex align-items-center justify-content-between border-light py-3">
+          <div>
+            <h6>
+              <FontAwesomeIcon
+                icon={faStickyNote}
+                className="icon icon-xs me-3"
+              />
+              Feedback
+            </h6>
+            <div className="align-items-center">
+              <Card.Link href="#" className="text-primary">
+                {data.feedback ? data.feedback : "NIL"}
+              </Card.Link>
+            </div>
+          </div>
+        </div>
       </Card.Body>
     </Card>
   );

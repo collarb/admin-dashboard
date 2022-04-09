@@ -9,6 +9,8 @@ export const STATUS_FORWARD_DISPLAY = "For Review";
 export const STATUS_REJECT= "reject";
 export const STATUS_REJECT_DISPLAY = "Rejected";
 
+export const STATUS_PENDING_DISPLAY = "Pending";
+
 export const REPORT = "report";
 export const MALE = "male";
 export const FEMALE = "female";
