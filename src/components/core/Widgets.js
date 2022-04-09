@@ -51,6 +51,7 @@ import teamMembers from "../../data/teamMembers";
 import { Worker } from "@react-pdf-viewer/core";
 import { Viewer } from "@react-pdf-viewer/core";
 import { fullScreenPlugin } from "@react-pdf-viewer/full-screen";
+import Moment from 'react-moment';
 
 export const ProfileCardWidget = () => {
   return (
@@ -615,7 +616,7 @@ export const ReportDetailWidget = ({ data = {} }) => {
           </div>
           <div>
             <Card.Link href="#" className="text-primary">
-              {data.created_on ? data.created_on : "NIL"}
+              <Moment format="ddd, Do MMM YYYY">{data.created_on ? data.created_on : "NIL"}</Moment>
             </Card.Link>
           </div>
         </div>

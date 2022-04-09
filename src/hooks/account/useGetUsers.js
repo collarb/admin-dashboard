@@ -33,6 +33,7 @@ function useGetUsers() {
 
     const onPageChange = value => {
         setPage(value);
+        setLoading(true);
     };
 
     return {loading, refreshing, users, pageCount, itemsPerPage, page, refresh, onPageChange};

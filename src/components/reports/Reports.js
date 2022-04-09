@@ -1,8 +1,8 @@
 import React, { useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faForward, faBackward } from "@fortawesome/free-solid-svg-icons";
-import ReactPaginate from 'react-paginate';
-import Moment from 'react-moment';
+import ReactPaginate from "react-paginate";
+import Moment from "react-moment";
 import {
   faEnvelopeOpenText,
   faAngleDown,
@@ -28,7 +28,6 @@ import useUpdateReport from "../../hooks/reports/useUpdateReport";
 import {
   REPORT,
   STATUS_APPROVE,
-  STATUS_COMPLETE,
   STATUS_FORWARD,
   STATUS_APPROVE_DISPLAY,
   STATUS_REJECT_DISPLAY,
@@ -40,15 +39,24 @@ import useModal from "../../hooks/core/useModal";
 import FeedbackForm from "./FeedbackForm";
 import DropdownMenu from "../core/DropdownMenu";
 import ReportDetail from "./ReportDetail";
-import { userContext } from '../../context/userContext';
-import ReportForm from './ReportForm';
+import { userContext } from "../../context/userContext";
+import ReportForm from "./ReportForm";
 
 function Reports() {
   const { user } = useContext(userContext);
-  const { reports, refresh, loading, refreshing, pageCount, itemsPerPage, page, onPageChange } = useGetReports();
+  const {
+    reports,
+    refresh,
+    loading,
+    refreshing,
+    pageCount,
+    itemsPerPage,
+    page,
+    onPageChange,
+  } = useGetReports();
   const { updateReport, deleteReport, success } = useUpdateReport();
   const { openModal } = useModal();
-  
+
   useEffect(() => {
     if (success) refresh();
   }, [success]);
@@ -58,8 +66,8 @@ function Reports() {
   };
 
   const handleEditReport = (report) => {
-    openModal(<ReportForm report={report} edit={true} />, "Edit Report");
-  }
+    openModal(<ReportForm report={report} edit={true} />, "Edit Report",{ size: "lg" });
+  };
   const viewReportDetails = (id) => {
     openModal(<ReportDetail reportId={id} />, "Report Details", { size: "xl" });
   };
@@ -124,11 +132,15 @@ function Reports() {
 
               <ReactPaginate
                 breakLabel="..."
-                nextLabel={<FontAwesomeIcon icon={faForward} className="me-2" />}
-                onPageChange={event => onPageChange(event.selected)}
+                nextLabel={
+                  <FontAwesomeIcon icon={faForward} className="me-2" />
+                }
+                onPageChange={(event) => onPageChange(event.selected)}
                 pageRangeDisplayed={5}
                 pageCount={Math.ceil(pageCount / itemsPerPage)}
-                previousLabel={<FontAwesomeIcon icon={faBackward} className="me-2" />}
+                previousLabel={
+                  <FontAwesomeIcon icon={faBackward} className="me-2" />
+                }
                 renderOnZeroPageCount={null}
                 forcePage={page}
                 containerClassName={"pagination justify-content-end"}
@@ -151,11 +163,15 @@ function Reports() {
 }
 
 const TableRow = (props) => {
-  const { item, index, updateReport, deleteReport, handleFeedback, handleEditReport } = props;
   const {
-    viewReportDetails,
-    user,
+    item,
+    index,
+    updateReport,
+    deleteReport,
+    handleFeedback,
+    handleEditReport,
   } = props;
+  const { viewReportDetails, user } = props;
 
   return (
     <tr>
@@ -181,7 +197,7 @@ const TableRow = (props) => {
       </td>
       <td>{item.area.name}</td>
       <td>
-      <Moment format='ddd, Do MMM YYYY'>{item.created_on}</Moment>
+        <Moment format="ddd, Do MMM YYYY">{item.created_on}</Moment>
       </td>
       <td>
         {item.status_display}
@@ -199,25 +215,6 @@ const TableRow = (props) => {
             Action
           </Dropdown.Toggle>
           <DropdownMenu>
-            <Dropdown.Item
-              className="fw-bold"
-              onClick={() => handleFeedback(item.id)}
-            >
-              <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" /> Add
-              Feedback
-            </Dropdown.Item>
-            <Dropdown.Item
-              className="fw-bold"
-              onClick={() =>
-                updateReport(
-                  REPORT,
-                  "Are you sure you want to forward this report for review?",
-                  item.id,
-                  {
-                    status: STATUS_FORWARD,
-                  }
-                )
-              }>Forward</Dropdown.Item>
             <Dropdown.Item
               className="fw-bold"
               onClick={() => viewReportDetails(item.id)}
@@ -239,13 +236,11 @@ const TableRow = (props) => {
             >
               <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
             </Dropdown.Item>
-            {item.status !== STATUS_COMPLETE && (
+            {![STATUS_APPROVE_DISPLAY].includes(item.status_display) && (
               <>
                 <Dropdown.Item
                   className="fw-bold"
-                  onClick={() =>
-                    handleEditReport(item )
-                  }
+                  onClick={() => handleEditReport(item)}
                 >
                   <FontAwesomeIcon icon={faPencilAlt} className="me-2" /> Edit
                 </Dropdown.Item>
@@ -255,7 +250,7 @@ const TableRow = (props) => {
                   onClick={() =>
                     deleteReport(
                       "Are you sure you want to delete this report?",
-                      item.id,
+                      item.id
                     )
                   }
                 >
@@ -269,7 +264,7 @@ const TableRow = (props) => {
                   className="fw-bold"
                   onClick={() => handleFeedback(item.id)}
                 >
-                  <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" />{" "}
+                  <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" />
                   Add Feedback
                 </Dropdown.Item>
               )}
@@ -310,8 +305,8 @@ const TableRow = (props) => {
                     )
                   }
                 >
-                  <FontAwesomeIcon icon={faFileArchive} className="me-2" />{" "}
-                  Forward For Review
+                  <FontAwesomeIcon icon={faFileArchive} className="me-2" />
+                  Reject
                 </Dropdown.Item>
               )}
             {user.is_manager &&
