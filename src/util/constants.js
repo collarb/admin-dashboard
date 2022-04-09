@@ -29,3 +29,6 @@ export const USER_GENDER = [
     ["male","Male"],
     ["female","Female"],
 ];
+
+export const INCIDENT_NOTIFICATION = "KlaConnectIncident"
+export const REPORT_NOTIFICATION = "KlaConnectReport"

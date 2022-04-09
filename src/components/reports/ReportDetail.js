@@ -6,6 +6,7 @@ import Loader from "../core/Loader";
 import { ReportDetailWidget, AttachementPreviewWidget } from '../core/Widgets';
 
 function ReportDetail({ reportId }) {
+    
     const { loading, report } = useGetReport(reportId);
     
     return ( 

@@ -1,11 +1,12 @@
-import React, { useEffect,useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEnvelopeOpenText,
-  faAngleDown,
   faFileArchive,
   faCheck,
+  faTimesCircle,
   faEye,
+  faEllipsisH,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Col,
@@ -18,8 +19,15 @@ import {
 import useGetReports from "../../hooks/reports/useGetReports";
 import Loader from "../core/Loader";
 import useUpdateReport from "../../hooks/reports/useUpdateReport";
-import { REPORT, STATUS_APPROVE, STATUS_FORWARD, STATUS_APPROVE_DISPLAY, 
-  STATUS_REJECT_DISPLAY, STATUS_FORWARD_DISPLAY } from "../../util/constants";
+import {
+  REPORT,
+  STATUS_APPROVE,
+  STATUS_FORWARD,
+  STATUS_APPROVE_DISPLAY,
+  STATUS_REJECT_DISPLAY,
+  STATUS_FORWARD_DISPLAY,
+  STATUS_REJECT,
+} from "../../util/constants";
 import Actions from "../core/actions";
 import useModal from "../../hooks/core/useModal";
 import FeedbackForm from "./FeedbackForm";
@@ -69,6 +77,7 @@ function Reports() {
                       <tr>
                         <th className="border-0">#</th>
                         <th className="border-0">Type</th>
+                        <th className="border-0">Ref NO.</th>
                         <th className="border-0">Subject</th>
                         <th className="border-0">Description</th>
                         <th className="border-0">Affected Area</th>
@@ -114,7 +123,7 @@ const TableRow = (props) => {
     updateReport,
     handleFeedback,
     viewReportDetails,
-    user
+    user,
   } = props;
 
   return (
@@ -125,6 +134,7 @@ const TableRow = (props) => {
         </Card.Link>
       </td>
       <td>{item.type_display.name}</td>
+      <td>{item.ref}</td>
       <td>{item.title}</td>
       <td>
         <p
@@ -140,7 +150,10 @@ const TableRow = (props) => {
       </td>
       <td>{item.area.name}</td>
       <td>{item.created_on}</td>
-      <td>{item.status_display}</td>
+      <td>
+        {item.status_display}
+        {item.published ? " & Published" : null}
+      </td>
       <td>
         <Dropdown className="btn-toolbar">
           <Dropdown.Toggle
@@ -149,7 +162,7 @@ const TableRow = (props) => {
             size="sm"
             className="me-2"
           >
-            <FontAwesomeIcon icon={faAngleDown} className="me-2" />
+            <FontAwesomeIcon icon={faEllipsisH} className="me-2" />
             Action
           </Dropdown.Toggle>
           <DropdownMenu>
@@ -159,54 +172,112 @@ const TableRow = (props) => {
             >
               <FontAwesomeIcon icon={faEye} className="me-2" /> View Details
             </Dropdown.Item>
-            {
-              user.is_manager &&
-              <Dropdown.Item
-                className="fw-bold"
-                onClick={() => handleFeedback(item.id)}
-              >
-                <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" /> Add
-                Feedback
-              </Dropdown.Item>
-            }
-            
-            {
-              user.is_data_entrant && !([STATUS_FORWARD_DISPLAY, STATUS_APPROVE_DISPLAY].includes(item.status_display)) &&
+            {user.is_manager &&
+              [STATUS_FORWARD_DISPLAY].includes(item.status_display) && (
+                <Dropdown.Item
+                  className="fw-bold"
+                  onClick={() => handleFeedback(item.id)}
+                >
+                  <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" />{" "}
+                  Add Feedback
+                </Dropdown.Item>
+              )}
+
+            {user.is_data_entrant &&
+              ![STATUS_FORWARD_DISPLAY, STATUS_APPROVE_DISPLAY].includes(
+                item.status_display
+              ) && (
+                <Dropdown.Item
+                  className="fw-bold"
+                  onClick={() =>
+                    updateReport(
+                      REPORT,
+                      "Are you sure you want to forward this report for review?",
+                      item.id,
+                      {
+                        status: STATUS_FORWARD,
+                      }
+                    )
+                  }
+                >
+                  <FontAwesomeIcon icon={faFileArchive} className="me-2" />{" "}
+                  Forward For Review
+                </Dropdown.Item>
+              )}
+            {(user.is_manager || user.is_ddt) &&
+              [STATUS_FORWARD_DISPLAY].includes(item.status_display) && (
+                <Dropdown.Item
+                  className="fw-bold"
+                  onClick={() =>
+                    updateReport(
+                      REPORT,
+                      "Are you sure you want to reject this report?",
+                      item.id,
+                      {
+                        status: STATUS_REJECT,
+                      }
+                    )
+                  }
+                >
+                  <FontAwesomeIcon icon={faFileArchive} className="me-2" />{" "}
+                  Forward For Review
+                </Dropdown.Item>
+              )}
+            {user.is_manager &&
+              ![STATUS_APPROVE_DISPLAY].includes(item.status_display) && (
+                <Dropdown.Item
+                  className="fw-bold"
+                  onClick={() =>
+                    updateReport(
+                      REPORT,
+                      "Are you sure you want to approve this report?",
+                      item.id,
+                      {
+                        status: STATUS_APPROVE,
+                      }
+                    )
+                  }
+                >
+                  <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
+                </Dropdown.Item>
+              )}
+            {(user.is_manager || user.is_ddt) &&
+              !item.published &&
+              [STATUS_APPROVE_DISPLAY].includes(item.status_display) && (
+                <Dropdown.Item
+                  className="fw-bold"
+                  onClick={() =>
+                    updateReport(
+                      REPORT,
+                      "Are you sure you want to publish this report?",
+                      item.id,
+                      {
+                        published: true,
+                      }
+                    )
+                  }
+                >
+                  <FontAwesomeIcon icon={faCheck} className="me-2" /> Publish
+                </Dropdown.Item>
+              )}
+            {(user.is_manager || user.is_ddt) && item.published && (
               <Dropdown.Item
                 className="fw-bold"
                 onClick={() =>
                   updateReport(
                     REPORT,
-                    "Are you sure you want to forward this report for review?",
+                    "Are you sure you want to unpublish this report?",
                     item.id,
                     {
-                      status: STATUS_FORWARD,
+                      published: false,
                     }
                   )
                 }
               >
-                <FontAwesomeIcon icon={faFileArchive} className="me-2" /> Forward
-                For Review
+                <FontAwesomeIcon icon={faTimesCircle} className="me-2" />
+                Unpublish
               </Dropdown.Item>
-            }
-            {
-              user.is_manager && !([STATUS_APPROVE_DISPLAY].includes(item.status_display)) &&
-              <Dropdown.Item
-                className="fw-bold"
-                onClick={() =>
-                  updateReport(
-                    REPORT,
-                    "Are you sure you want to approve this report?",
-                    item.id,
-                    {
-                      status: STATUS_APPROVE,
-                    }
-                  )
-                }
-              >
-                <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
-              </Dropdown.Item>
-            }
+            )}
           </DropdownMenu>
         </Dropdown>
       </td>

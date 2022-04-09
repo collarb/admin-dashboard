@@ -17,6 +17,8 @@ import {
   faHourglass,
   faMapMarker,
   faStickyNote,
+  faEye,
+  faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faAngular,
@@ -649,11 +651,11 @@ export const ReportDetailWidget = ({ data = {} }) => {
 
         {data?.published && (
           <>
-            <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+            <div className="d-flex align-items-center justify-content-between border-bottom border-top border-light py-3">
               <div>
                 <h6>
                   <FontAwesomeIcon
-                    icon={faGlobeEurope}
+                    icon={faEye}
                     className="icon icon-xs me-3"
                   />
                   Views
@@ -669,7 +671,7 @@ export const ReportDetailWidget = ({ data = {} }) => {
               <div>
                 <h6>
                   <FontAwesomeIcon
-                    icon={faGlobeEurope}
+                    icon={faThumbsUp}
                     className="icon icon-xs me-3"
                   />
                   Likes
@@ -683,6 +685,24 @@ export const ReportDetailWidget = ({ data = {} }) => {
             </div>
           </>
         )}
+
+        <div className="d-flex align-items-center justify-content-between border-top border-light py-3">
+                  <div>
+                    <h6>
+                      <FontAwesomeIcon
+                        icon={faStickyNote}
+                        className="icon icon-xs me-3"
+                      />
+                      Feedback
+                    </h6>
+                    <div className="align-items-center">
+                      <Card.Link href="#" className="text-primary">
+                        {data.feedback ? data.feedback : "NIL"}
+                      </Card.Link>
+                    </div>
+                  </div>
+        </div>
+        
       </Card.Body>
     </Card>
   );

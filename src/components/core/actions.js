@@ -18,11 +18,11 @@ function Actions({refresh=f=>f}) {
     const { openModal } = useModal();
 
     const addReport = () => {
-        openModal(<ReportForm refresh={refresh}/>, "Create New Report");
+        openModal(<ReportForm refresh={refresh}/>, "Create New Report",{size:"lg"});
       };
 
     const addUser = () => {
-        openModal(<AccountForm refresh={refresh}/>, "Register user");
+        openModal(<AccountForm refresh={refresh}/>, "Register user",{size:"lg"});
     }
 
     return(
