@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCashRegister, faChartLine, faCloudUploadAlt, faPlus, faBook, faUser, faUserShield } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Button, Dropdown, ButtonGroup } from '@themesberg/react-bootstrap';
 
-import { CounterWidget, CircleChartWidget, BarChartWidget, TeamMembersWidget, ProgressTrackWidget, RankingWidget, SalesValueWidget, SalesValueWidgetPhone, AcquisitionWidget } from '../core/Widgets';
+import { CounterWidget, CircleChartWidget, BarChartWidget, TeamMembersWidget, ProgressTrackWidget, RankingWidget, ReportedIncidentsWidget, SalesValueWidgetPhone, AcquisitionWidget } from '../core/Widgets';
 import { PageVisitsTable } from '../core/Tables';
 import { trafficShares, totalOrders } from "../../data/charts";
 import Actions from "../core/actions";
@@ -16,10 +16,26 @@ function Dashboard() {
 
       <Row className="justify-content-md-center">
         <Col xs={12} className="mb-4 d-none d-sm-block">
-          <SalesValueWidget
-            title="Sales Value"
+          <ReportedIncidentsWidget
+            title="Incidents And Reports Summary"
             value="10,567"
             percentage={10.57}
+            chart_data={{
+              labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+              series: [
+                {
+                  name: "Incidents",
+                  data: [1, 2, 2, 3, 3, 4, 3],
+                  meta:"incidents",
+                  backgroundColor:'rgb(255, 99, 132)'
+                },
+                {
+                  name: "Reports",
+                  data: [0, 1, 6, 7, 2, 1, 2],
+                  meta: "reports"
+                },
+              ],
+            }}
           />
         </Col>
         <Col xs={12} className="mb-4 d-sm-none">

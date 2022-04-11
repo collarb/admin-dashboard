@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEnvelopeOpenText,
-  faAngleDown,
+  faEllipsisH,
   faFileArchive,
   faCheck,
   faForward,
@@ -198,7 +198,7 @@ function TableRow({
             size="sm"
             className="me-2"
           >
-            <FontAwesomeIcon icon={faAngleDown} className="me-2" />
+            <FontAwesomeIcon icon={faEllipsisH} className="me-2" />
             Action
           </Dropdown.Toggle>
           <DropdownMenu>
@@ -212,7 +212,7 @@ function TableRow({
 
             {/* forward for approval */}
 
-            {user.is_data_entrant && item.status_display==STATUS_PENDING_DISPLAY && (
+            {user.is_data_entrant && item.status_display===STATUS_PENDING_DISPLAY && (
                 <Dropdown.Item
                   className="fw-bold"
                   onClick={() =>
@@ -236,10 +236,10 @@ function TableRow({
 
             {
             // data entrant
-            ((user.is_data_entrant && item.status_display==STATUS_PENDING_DISPLAY) ||
+            ((user.is_data_entrant && item.status_display===STATUS_PENDING_DISPLAY) ||
 
             // manager
-            (user.is_manager && item.status_display==STATUS_FORWARD_DISPLAY)) && (
+            (user.is_manager && item.status_display===STATUS_FORWARD_DISPLAY)) && (
               <Dropdown.Item
                 className="fw-bold"
                 onClick={() => handleFeedback(item.id)}
@@ -251,7 +251,7 @@ function TableRow({
 
             {/* Approve */}
 
-            {user.is_manager && item.status_display==STATUS_FORWARD_DISPLAY && (
+            {user.is_manager && item.status_display===STATUS_FORWARD_DISPLAY && (
                 <Dropdown.Item
                   className="fw-bold"
                   onClick={() =>

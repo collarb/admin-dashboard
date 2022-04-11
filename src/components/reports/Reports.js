@@ -5,7 +5,6 @@ import ReactPaginate from "react-paginate";
 import Moment from "react-moment";
 import {
   faEnvelopeOpenText,
-  faAngleDown,
   faPencilAlt,
   faTrash,
   faFileArchive,
@@ -30,10 +29,8 @@ import {
   STATUS_APPROVE,
   STATUS_FORWARD,
   STATUS_APPROVE_DISPLAY,
-  STATUS_REJECT_DISPLAY,
   STATUS_FORWARD_DISPLAY,
   STATUS_REJECT,
-  STATUS_PENDING_DISPLAY,
 } from "../../util/constants";
 import Actions from "../core/actions";
 import useModal from "../../hooks/core/useModal";
@@ -231,7 +228,7 @@ const TableRow = (props) => {
                 {
                   // edit and delete
                   ((user.is_data_entrant &&
-                    item.status_display != STATUS_APPROVE_DISPLAY) ||
+                    item.status_display !== STATUS_APPROVE_DISPLAY) ||
                     user.is_manager ||
                     user.is_ddt) && (
                     <>
@@ -248,7 +245,8 @@ const TableRow = (props) => {
                         onClick={() =>
                           deleteReport(
                             "Are you sure you want to delete this report?",
-                            item.id
+                            item.id,
+                            REPORT
                           )
                         }
                       >
@@ -262,7 +260,7 @@ const TableRow = (props) => {
             )}
 
             {/* add feedback */}
-            {user.is_manager && item.status_display == STATUS_FORWARD_DISPLAY && (
+            {user.is_manager && item.status_display === STATUS_FORWARD_DISPLAY && (
               <Dropdown.Item
                 className="fw-bold"
                 onClick={() => handleFeedback(item.id)}
@@ -297,7 +295,7 @@ const TableRow = (props) => {
 
             {/* reject */}
             {(user.is_manager || user.is_ddt) &&
-              item.status_display == STATUS_FORWARD_DISPLAY && (
+              item.status_display === STATUS_FORWARD_DISPLAY && (
                 <Dropdown.Item
                   className="fw-bold"
                   onClick={() =>
@@ -317,7 +315,7 @@ const TableRow = (props) => {
               )}
 
               {/* approve */}
-            {user.is_manager && item.status_display != STATUS_APPROVE_DISPLAY && (
+            {user.is_manager && item.status_display !== STATUS_APPROVE_DISPLAY && (
                 <Dropdown.Item
                   className="fw-bold"
                   onClick={() =>
@@ -337,7 +335,7 @@ const TableRow = (props) => {
 
               {/* publish */}
             {(user.is_manager || user.is_ddt) &&
-              !item.published && item.status_display == STATUS_APPROVE_DISPLAY && (
+              !item.published && item.status_display === STATUS_APPROVE_DISPLAY && (
                 <Dropdown.Item
                   className="fw-bold"
                   onClick={() =>

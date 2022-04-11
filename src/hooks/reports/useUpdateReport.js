@@ -28,7 +28,7 @@ function useUpdateReport() {
         setUpdating(false);
         closeModal();
         if(data) {
-          toast.success(`${type==REPORT?"Report":"Incident"} Updated Successfully`, {
+          toast.success(`${type===REPORT?"Report":"Incident"} Updated Successfully`, {
             duration: 6000,
             position: "top-center",
             style: {
@@ -42,16 +42,17 @@ function useUpdateReport() {
     });
   }
 
-  const deleteReport = (title, id) => {
+  const deleteReport = (title, id, type) => {
+    const API = type === REPORT? REPORT_API : INCIDENTS_API;
     openConfirm(title, () => {
       setUpdating(true);
-      ajax(`${REPORT_API}${id}/`, {
+      ajax(`${API}${id}/`, {
         method: "DELETE",
       }).then(data => {
           setUpdating(false);
           closeModal();
           if(data) {
-            toast.success("Successfully deleted report", {
+            toast.success(`${type===REPORT?"Report":"Incident"} Deleted Successfully`, {
               duration: 6000,
               position: "top-center",
               style: {
