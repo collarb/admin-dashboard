@@ -27,7 +27,6 @@ function Dashboard() {
                   name: "Incidents",
                   data: [1, 2, 2, 3, 3, 4, 3],
                   meta:"incidents",
-                  backgroundColor:'rgb(255, 99, 132)'
                 },
                 {
                   name: "Reports",
