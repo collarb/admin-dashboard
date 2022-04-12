@@ -5,7 +5,7 @@ import { REPORT_API } from "../../util/apis";
 import useModal from "../../hooks/core/useModal";
 import { REPORT } from '../../util/constants';
 
-function FeedbackForm({ reportId }) {
+function FeedbackForm({ reportId, type }) {
     const [feedback, setFeedback] = useState("");
     const { submitUpdate } = useUpdateReport();
     const { ModalFooter } = useModal();
@@ -13,7 +13,7 @@ function FeedbackForm({ reportId }) {
     const submit = (event) => {
         event.preventDefault();
         submitUpdate(
-            REPORT,
+            type,
             reportId,
             {
               feedback: feedback

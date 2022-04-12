@@ -4,6 +4,7 @@ export const Routes = {
   reportDetail: { path: "/reports/:Id" },
   DashboardOverview: { path: "/dashboard/overview" },
   Incidents: { path: "/incidents" },
+  IncidentDetail: { path: "/incidents/:Id" },
   Notifications: { path: "/notifications" },
   Users: { path: "/users" },
 

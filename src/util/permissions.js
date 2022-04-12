@@ -1,2 +1,2 @@
 
-export const canViewUsers = user => !user.is_data_entrant;
+export const canViewUsers = user => !user?.is_data_entrant;

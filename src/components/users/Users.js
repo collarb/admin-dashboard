@@ -17,6 +17,7 @@ import Loader from "../core/Loader";
 import Actions from "../core/actions";
 import {ROLES, USER_STATUSES, USER_GENDER} from "../../util/constants";
 import DropdownMenu from '../core/DropdownMenu';
+import Moment from "react-moment";
 
 function Users(){
 
@@ -190,8 +191,8 @@ function TableRow({item, index}) {
       <td>{item.profile?.mobile_number?item.profile.mobile_number:"NIL"}</td>
       <td>{item.gender}</td>
       <td>{item.display_role}</td>
-      <td>{item.date_joined}</td>
-      <td className="d-flex justify-content-between flex-wrap flex-md-nowrap">
+      <td><Moment format="ddd, Do MMM YYYY">{item.date_joined}</Moment></td>
+      <td>
         <a><FontAwesomeIcon icon={faEye} /> View Details</a>
       </td>
     </tr>

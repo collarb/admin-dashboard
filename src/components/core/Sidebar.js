@@ -11,7 +11,7 @@ import { Routes } from "../../util/routes";
 import ReactHero from "../../assets/img/technologies/react-hero-logo.svg";
 import ProfilePicture from "../../assets/img/team/profile-picture-3.jpg";
 import { canViewUsers } from '../../util/permissions';
-import { authContext } from '../../context/authContext';
+import { userContext } from '../../context/userContext';
 
 export default (props = {}) => {
   const location = useLocation();
@@ -19,7 +19,7 @@ export default (props = {}) => {
   const [show, setShow] = useState(false);
   const showClass = show ? "show" : "";
   const onCollapse = () => setShow(!show);
-  const { user } = useContext(authContext);
+  const { user } = useContext(userContext);
 
   const NavItem = (props) => {
     const { title, link, external, target, icon, image, badgeText, badgeBg = "secondary", badgeColor = "primary" } = props;

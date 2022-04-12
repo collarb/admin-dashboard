@@ -39,6 +39,7 @@ function useFetchIncidents(navigation) {
 
     const onPageChange = value => {
         setPage(value);
+        setLoading(true);
     };
 
     return {loading, incidents, refreshing, pageCount, itemsPerPage, page, onPageChange, refresh};

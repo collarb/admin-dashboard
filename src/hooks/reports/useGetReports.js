@@ -33,6 +33,7 @@ function useGetReports() {
 
     const onPageChange = value => {
         setPage(value);
+        setLoading(true);
     };
 
     return {loading, reports, refreshing, loadReports, pageCount, itemsPerPage, page, refresh, onPageChange};
