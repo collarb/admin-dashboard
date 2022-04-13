@@ -19,6 +19,7 @@ import {
   faStickyNote,
   faEye,
   faThumbsUp,
+  faBell,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faAngular,
@@ -52,6 +53,8 @@ import { Worker } from "@react-pdf-viewer/core";
 import { Viewer } from "@react-pdf-viewer/core";
 import { fullScreenPlugin } from "@react-pdf-viewer/full-screen";
 import Moment from "react-moment";
+import {Notification} from "./Navbar";
+import useNotifications from "../../hooks/notification/useNotifications";
 
 export const ProfileCardWidget = () => {
   return (
@@ -116,7 +119,7 @@ export const ChoosePhotoWidget = (props) => {
   );
 };
 
-export const CounterWidget = (props) => {
+export const CounterWidgetOld = (props) => {
   const { icon, iconColor, category, title, period, percentage } = props;
   const percentageIcon = percentage < 0 ? faAngleDown : faAngleUp;
   const percentageColor = percentage < 0 ? "text-danger" : "text-success";
@@ -157,6 +160,47 @@ export const CounterWidget = (props) => {
                 {percentage}%
               </span>{" "}
               Since last month
+            </div>
+          </Col>
+        </Row>
+      </Card.Body>
+    </Card>
+  );
+};
+
+export const CounterWidget = (props) => {
+  const { icon, iconColor, category, title, period, percentage, description } = props;
+  const percentageIcon = percentage < 0 ? faAngleDown : faAngleUp;
+  const percentageColor = percentage < 0 ? "text-danger" : "text-success";
+
+  return (
+    <Card border="light" className="shadow-sm">
+      <Card.Body>
+        <Row className="d-block d-xl-flex align-items-center">
+          <Col
+            xl={5}
+            className="text-xl-center d-flex align-items-center justify-content-xl-center mb-3 mb-xl-0"
+          >
+            <div
+              className={`icon icon-shape icon-md icon-${iconColor} rounded me-4 me-sm-0`}
+            >
+              <FontAwesomeIcon icon={icon} />
+            </div>
+            <div className="d-sm-none">
+              <h5>{category}</h5>
+              <h3 className="mb-1">{title}</h3>
+            </div>
+          </Col>
+          <Col xs={12} xl={7} className="px-xl-0">
+            <div className="d-none d-sm-block">
+              <h5>{category}</h5>
+              <h3 className="mb-1">{title}</h3>
+            </div>
+            <small>
+              {period} <FontAwesomeIcon icon={faCalendar} size="xs" />
+            </small>
+            <div className="small mt-2">
+              {description}
             </div>
           </Col>
         </Row>
@@ -773,6 +817,22 @@ export const IncidentDetailWidget = ({ data = {} }) => {
           <div>
             <h6>
               <FontAwesomeIcon
+                icon={faMapMarker}
+                className="icon icon-xs me-3"
+              />
+              Area Geo Co-ordinates
+            </h6>
+            <div className="align-items-center">
+              <Card.Link href="#" className="text-primary">
+                {data.latitude? data.latitude: "NIL"}, {data.longitude? data.longitude: "NIL"}
+              </Card.Link>
+            </div>
+          </div>
+        </div>
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+          <div>
+            <h6>
+              <FontAwesomeIcon
                 icon={faCalendar}
                 className="icon icon-xs me-3"
               />
@@ -857,6 +917,30 @@ export const AttachementPreviewWidget = ({ title, attachment }) => {
         ) : (
           <Image fluid={true} src={attachment} />
         )}
+      </Card.Body>
+    </Card>
+  );
+};
+
+export const NotificationWidget = () => {
+  const {notifications } = useNotifications("unread=true");
+  return (
+    <Card border="light" className="shadow-sm">
+      <Card.Body>
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light pb-3">
+          <div>
+            <h6>
+              <FontAwesomeIcon
+                icon={faBell}
+                className="icon icon-xs me-3"
+              />
+              Notifications
+            </h6>
+          </div>
+        </div>
+          <ListGroup className="list-group-flush">
+          {notifications.map(n => <Notification key={`notification-${n.id}`} {...n} />)}
+          </ListGroup>
       </Card.Body>
     </Card>
   );
