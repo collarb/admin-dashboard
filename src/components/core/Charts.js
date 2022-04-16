@@ -15,8 +15,8 @@ export const DataValueChart = ({ data }) => {
     axisY: {
       // On the y-axis start means left and end means right
       showGrid: false,
-      showLabel: false,
-      labelInterpolationFnc: (value) => `$${value / 1}k`,
+      showLabel: true,
+      labelInterpolationFnc: (value) => `${value / 1}`,
     },
   };
 
