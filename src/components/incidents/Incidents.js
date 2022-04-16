@@ -28,14 +28,103 @@ import {
   STATUS_FORWARD,
   STATUS_FORWARD_DISPLAY,
   STATUS_APPROVE_DISPLAY,
-  STATUS_PENDING_DISPLAY
+  STATUS_PENDING_DISPLAY,
 } from "../../util/constants";
 import { INCIDENTS_API } from "../../util/apis";
 import DropdownMenu from "../core/DropdownMenu";
 import { userContext } from "../../context/userContext";
 import FeedbackForm from "../reports/FeedbackForm";
 import IncidentDetail from "./IncidentDetail";
-import Moment from 'react-moment';
+import Moment from "react-moment";
+import { Link } from "react-router-dom";
+
+export const DashboardIncidents = () => {
+
+  const { incidents } = useFetchIncidents(5);
+
+  const { user } = useContext(userContext);
+
+  const TableRow = ({item, index}) => {
+    return (
+      <tr>
+      <td className="fw-bold">
+        <Link to={`incidents/${item.id}/`}>
+        {item.type_display.name}
+        </Link>
+      </td>
+      <td>
+      <p
+          style={{
+            width: "90px",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {item.subject}
+          </p></td>
+      <td>
+        <p
+          style={{
+            width: "90px",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {item.description}
+        </p>
+      </td>
+      <td>{item.area.name}</td>
+      <td>{item.status_display}</td>
+    </tr>
+    );
+  };
+
+  return (
+    <Card border="light" className="shadow-sm">
+      <Card.Header>
+        <Row className="align-items-center">
+          <Col>
+            <h5>Reported Incidents</h5>
+          </Col>
+          <Col className="text-end">
+            <Link to={"/incidents"}>
+              <Button variant="secondary" size="sm">
+                View all
+              </Button>
+            </Link>
+          </Col>
+        </Row>
+      </Card.Header>
+      <Table responsive className="align-items-center table-flush">
+        <thead className="thead-light">
+          <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Description</th>
+            <th scope="col">Affected Area</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {incidents.length === 0 ? (
+            <div>No Reported Incidents</div>
+          ) : (
+            incidents.map((pt, index) => (
+              <TableRow
+                key={`page-traffic-${pt.id}`}
+                item={pt}
+                index={index}
+                user={user}
+              />
+            ))
+          )}
+        </tbody>
+      </Table>
+    </Card>
+  );
+};
 
 function Incidents() {
   const {
@@ -56,7 +145,9 @@ function Incidents() {
   }, [success]);
 
   const viewIncidentDetails = (id) => {
-    openModal(<IncidentDetail incidentId={id} />, "Incident Details", { size: "xl" });
+    openModal(<IncidentDetail incidentId={id} />, "Incident Details", {
+      size: "xl",
+    });
   };
 
   const handleFeedback = (id) => {
@@ -93,7 +184,6 @@ function Incidents() {
                         <th className="border-0">Type</th>
                         <th className="border-0">Reference NO.</th>
                         <th className="border-0">Subject</th>
-                        <th className="border-0">Description</th>
                         <th className="border-0">Affected Area</th>
                         <th className="border-0">Reported On</th>
                         <th className="border-0">Status</th>
@@ -172,7 +262,6 @@ function TableRow({
       </td>
       <td className="fw-bold">{item.type_display.name}</td>
       <td className="fw-bold">{item.ref}</td>
-      <td>{item.subject}</td>
       <td>
         <p
           style={{
@@ -182,12 +271,12 @@ function TableRow({
             textOverflow: "ellipsis",
           }}
         >
-          {item.description}
+          {item.subject}
         </p>
       </td>
       <td>{item.area.name}</td>
       <td>
-       <Moment format="ddd, Do MMM YYYY">{item.created_on}</Moment>
+        <Moment format="ddd, Do MMM YYYY">{item.created_on}</Moment>
       </td>
       <td>{item.status_display}</td>
       <td>
@@ -212,7 +301,8 @@ function TableRow({
 
             {/* forward for approval */}
 
-            {user.is_data_entrant && item.status_display===STATUS_PENDING_DISPLAY && (
+            {user.is_data_entrant &&
+              item.status_display === STATUS_PENDING_DISPLAY && (
                 <Dropdown.Item
                   className="fw-bold"
                   onClick={() =>
@@ -231,43 +321,44 @@ function TableRow({
                 </Dropdown.Item>
               )}
 
-
             {/* add feedback */}
 
             {
-            // data entrant
-            ((user.is_data_entrant && item.status_display===STATUS_PENDING_DISPLAY) ||
-
-            // manager
-            (user.is_manager && item.status_display===STATUS_FORWARD_DISPLAY)) && (
-              <Dropdown.Item
-                className="fw-bold"
-                onClick={() => handleFeedback(item.id)}
-              >
-                <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" />{" "}
-                Add Feedback
-              </Dropdown.Item>
-            )}
+              // data entrant
+              ((user.is_data_entrant &&
+                item.status_display === STATUS_PENDING_DISPLAY) ||
+                // manager
+                (user.is_manager &&
+                  item.status_display === STATUS_FORWARD_DISPLAY)) && (
+                <Dropdown.Item
+                  className="fw-bold"
+                  onClick={() => handleFeedback(item.id)}
+                >
+                  <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" />{" "}
+                  Add Feedback
+                </Dropdown.Item>
+              )
+            }
 
             {/* Approve */}
 
-            {user.is_manager && item.status_display===STATUS_FORWARD_DISPLAY && (
-                <Dropdown.Item
-                  className="fw-bold"
-                  onClick={() =>
-                    updateReport(
-                      INCIDENTS_API,
-                      "Are you sure you want to approve this incident?",
-                      item.id,
-                      {
-                        status: STATUS_APPROVE,
-                      }
-                    )
-                  }
-                >
-                  <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
-                </Dropdown.Item>
-              )}
+            {user.is_manager && item.status_display === STATUS_FORWARD_DISPLAY && (
+              <Dropdown.Item
+                className="fw-bold"
+                onClick={() =>
+                  updateReport(
+                    INCIDENTS_API,
+                    "Are you sure you want to approve this incident?",
+                    item.id,
+                    {
+                      status: STATUS_APPROVE,
+                    }
+                  )
+                }
+              >
+                <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
+              </Dropdown.Item>
+            )}
           </DropdownMenu>
         </Dropdown>
       </td>

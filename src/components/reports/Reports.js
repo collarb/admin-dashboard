@@ -40,6 +40,8 @@ import ReportDetail from "./ReportDetail";
 import { userContext } from "../../context/userContext";
 import ReportForm from "./ReportForm";
 
+
+
 function Reports() {
   const { user } = useContext(userContext);
   const {
@@ -97,8 +99,7 @@ function Reports() {
                         <th className="border-0">#</th>
                         <th className="border-0">Type</th>
                         <th className="border-0">Reference NO.</th>
-                        <th className="border-0">Subject</th>
-                        <th className="border-0">Description</th>
+                        <th className="border-0">Title</th>
                         <th className="border-0">Affected Area</th>
                         <th className="border-0">Reported On</th>
                         <th className="border-0">Status</th>
@@ -182,7 +183,6 @@ const TableRow = (props) => {
       </td>
       <td>{item.type_display.name}</td>
       <td>{item.ref}</td>
-      <td>{item.title}</td>
       <td>
         <p
           style={{
@@ -192,7 +192,7 @@ const TableRow = (props) => {
             textOverflow: "ellipsis",
           }}
         >
-          {item.description}
+          {item.title}
         </p>
       </td>
       <td>{item.area.name}</td>
