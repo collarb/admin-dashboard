@@ -8,11 +8,18 @@ import NOTIFICATIONS_DATA from "../../data/notifications";
 import Profile3 from "../../assets/img/team/profile-picture-3.jpg";
 import { userContext } from '../../context/userContext';
 import { authContext } from '../../context/authContext';
+import useModal from '../../hooks/core/useModal';
+import Profile from '../account/Profile';
 
 
 export default () => {
   const {user} = useContext(userContext);
   const {logout} = useContext(authContext);
+  const { openModal } = useModal();
+
+  const viewProfile = () => {
+    openModal(<Profile />, "Account Profile", { size: "lg" });
+  }
 
   const [notifications, setNotifications] = useState(NOTIFICATIONS_DATA);
   const areNotificationsRead = notifications.reduce((acc, notif) => acc && notif.read, true);
@@ -89,11 +96,8 @@ export default () => {
                 </div>
               </Dropdown.Toggle>
               <Dropdown.Menu className="user-dropdown dropdown-menu-right mt-2">
-                <Dropdown.Item className="fw-bold">
+                <Dropdown.Item className="fw-bold" onClick={() => viewProfile()}>
                   <FontAwesomeIcon icon={faUserCircle} className="me-2" /> My Profile
-                </Dropdown.Item>
-                <Dropdown.Item className="fw-bold">
-                  <FontAwesomeIcon icon={faCog} className="me-2" /> Configurations
                 </Dropdown.Item>
 
                 <Dropdown.Divider />
