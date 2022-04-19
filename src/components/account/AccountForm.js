@@ -6,6 +6,7 @@ import { ACTIVE, FEMALE, LOCK, MALE, ROLES } from "../../util/constants";
 import useAddUser from '../../hooks/account/useAddUser';
 import DangerousText from "../core/DangerousText";
 import useUpdateUser from '../../hooks/account/useUpdateUser';
+import { getRole } from "../../util/helper";
 
 function AccountForm({user}) {
   const [surname, setSurname] = useState(user?.last_name || '');
@@ -26,7 +27,7 @@ function AccountForm({user}) {
   const [status, setStatus] = useState(user?.is_active || ACTIVE);
   const [hod, setHod] = useState(user?.profile?.head_of_department || "0");
   const [errorPass, setErrorPass] = useState("");
-  const [role, setRole] = useState(ROLES[0][0]);
+  const [role, setRole] = useState(getRole(user));
 
   const { divisions, departments, designations } = useAccountMasterData();
   const { ModalFooter } = useModal();

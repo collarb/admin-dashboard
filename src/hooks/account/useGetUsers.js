@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import useFetch from '../core/useFetch';
 import {USERS_API} from '../../util/apis';
+import { createQueryParams } from '../../util/helper';
 
 function useGetUsers() {
     const [loading, setLoading] = useState(true);
@@ -13,11 +14,11 @@ function useGetUsers() {
     const itemsPerPage = 10;
 
     useEffect(() => {
-        loadUsers(setLoading);
+        loadUsers({}, setLoading);
     }, [page]);
 
-    const loadUsers = callback => {
-        ajax(`${USERS_API}?page=${1+page}&page_size=${itemsPerPage}`).then(data => {
+    const loadUsers = (filter, callback) => {
+        ajax(`${USERS_API}?page=${1+page}&page_size=${itemsPerPage}${createQueryParams(filter)}`).then(data => {
             if (data) {
                 setPageCount(data.count);
                 setUsers(data.results);
@@ -28,7 +29,7 @@ function useGetUsers() {
 
     const refresh = () => {
         setRefreshing(true);
-        loadUsers(setRefreshing);
+        loadUsers({}, setRefreshing);
     };
 
     const onPageChange = value => {
@@ -36,7 +37,7 @@ function useGetUsers() {
         setLoading(true);
     };
 
-    return {loading, refreshing, users, pageCount, itemsPerPage, page, refresh, onPageChange};
+    return {loading, refreshing, users, pageCount, itemsPerPage, page, refresh, onPageChange, loadUsers};
 }
 
 export default useGetUsers;

@@ -6,7 +6,7 @@ import colors from '../../util/colors';
 function useUpdateUser() {
     const ajax = useFetch();
 
-    const updateUser = (userId, payload) => {
+    const updateUser = (userId, payload, callback) => {
         ajax(
             `${USERS_API}${userId}/`,
             {
@@ -25,6 +25,7 @@ function useUpdateUser() {
                       color: 'white'
                     }
                 });
+                if(callback) callback();
             }
         })
     }

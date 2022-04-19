@@ -1,8 +1,8 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Form, InputGroup } from "@themesberg/react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faEye, faForward, faBackward, faEllipsisH, faFighterJet, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faEye, faForward, faBackward, faEllipsisH, faFighterJet, faPencilAlt, faCookie } from "@fortawesome/free-solid-svg-icons";
 import {
   Col,
   Row,
@@ -23,10 +23,15 @@ import AccountForm from '../account/AccountForm';
 import Profile from '../account/Profile';
 
 function Users(){
+    const [filter, setFilter] = useState(null);
 
-    const {loading, users, pageCount, itemsPerPage, page, onPageChange} = useGetUsers();
-    const { openConfirm, openModal } = useModal();
+    const {loading, users, pageCount, itemsPerPage, page, refresh, onPageChange, loadUsers} = useGetUsers();
+    const { openConfirm, openModal, closeModal } = useModal();
     const { updateUser } = useUpdateUser();
+    
+    useEffect(() => {
+      if(filter) loadUsers(filter, () => {});
+    }, [filter]);
 
     const handleViewUser = user => {
       openModal(<Profile user={user}/>, "User Profile", { size: "lg" });
@@ -42,10 +47,29 @@ function Users(){
       openConfirm(
         "Are you sure you want to deactivate this user?",
         () => {
-          updateUser(userId, { is_active: false });
+          updateUser(userId, { is_active: false }, () => {
+            refresh();
+            closeModal();
+          });
         }
       );
     };
+
+    const handleReactivateUser = userId => {
+      openConfirm(
+        "Are you sure you want to reactivate this user?",
+        () => {
+          updateUser(userId, { is_active: true }, () => {
+            refresh();
+            closeModal();
+          });
+        }
+      );
+    };
+
+    const handleFilter = params => {
+      setFilter({...filter, ...params});
+    }
 
     return (
       <>
@@ -63,77 +87,82 @@ function Users(){
                       </Col>
                       <Col>
                         <div className="d-flex flex-wrap flex-md-nowrap align-items-center py-4">
-                                <Dropdown>
-                                    <Dropdown.Toggle
-                                        as={Button}
-                                        variant="success"
-                                        size="sm"
-                                        className="me-2"
-                                    >
-                                        <FontAwesomeIcon icon={faAngleDown} className="me-2" />
-                                        Status Filter
-                                    </Dropdown.Toggle>
-                                    <DropdownMenu>
-                                        {
-                                        USER_STATUSES.map(status=>(
-                                            <Dropdown.Item className="fw-bold">
-                                            :{status[1]}
-                                            </Dropdown.Item>
-                                        ))
-                                        }
-                                        
-                                    </DropdownMenu>
-                                </Dropdown>
-                                <Dropdown>
-                                    <Dropdown.Toggle
-                                        as={Button}
-                                        variant="success"
-                                        size="sm"
-                                        className="me-2"
-                                    >
-                                        <FontAwesomeIcon icon={faAngleDown} className="me-2" />
-                                        Role Filter
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
-                                        {
-                                        ROLES.map(role=>(
-                                            <Dropdown.Item className="fw-bold">
-                                            :{role[1]}
-                                            </Dropdown.Item>
-                                        ))
-                                        }
-                                        
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                                <Dropdown>
-                                    <Dropdown.Toggle
-                                        as={Button}
-                                        variant="success"
-                                        size="sm"
-                                        className="me-2"
-                                    >
-                                        <FontAwesomeIcon icon={faAngleDown} className="me-2" />
-                                        Gender Filter
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
-                                        {
-                                        USER_GENDER.map(gender=>(
-                                            <Dropdown.Item className="fw-bold">
-                                            :{gender[1]}
-                                            </Dropdown.Item>
-                                        ))
-                                        }
-                                        
-                                    </Dropdown.Menu>
-                                </Dropdown>
+                          {/* {
+                            Object.keys(filter).map((item, index) => (
+                              <span key={index}>{filter[item]} X</span>
+                            ))
+                          } */}
+                            <Dropdown>
+                                <Dropdown.Toggle
+                                    as={Button}
+                                    variant="success"
+                                    size="sm"
+                                    className="me-2"
+                                >
+                                    <FontAwesomeIcon icon={faAngleDown} className="me-2" />
+                                    Status Filter
+                                </Dropdown.Toggle>
+                                <DropdownMenu>
+                                    {
+                                    USER_STATUSES.map(status=>(
+                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter({is_active: status[0]})}>
+                                        :{status[1]}
+                                        </Dropdown.Item>
+                                    ))
+                                    }
+                                    
+                                </DropdownMenu>
+                            </Dropdown>
+                            <Dropdown>
+                                <Dropdown.Toggle
+                                    as={Button}
+                                    variant="success"
+                                    size="sm"
+                                    className="me-2"
+                                >
+                                    <FontAwesomeIcon icon={faAngleDown} className="me-2" />
+                                    Role Filter
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
+                                    {
+                                    ROLES.map(role=>(
+                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter({role: role[0]})}>
+                                        :{role[1]}
+                                        </Dropdown.Item>
+                                    ))
+                                    }
+                                    
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            <Dropdown>
+                                <Dropdown.Toggle
+                                    as={Button}
+                                    variant="success"
+                                    size="sm"
+                                    className="me-2"
+                                >
+                                    <FontAwesomeIcon icon={faAngleDown} className="me-2" />
+                                    Gender Filter
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
+                                    {
+                                    USER_GENDER.map(gender=>(
+                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter({gender: gender[0]})}>
+                                        :{gender[1]}
+                                        </Dropdown.Item>
+                                    ))
+                                    }
+                                    
+                                </Dropdown.Menu>
+                            </Dropdown>
 
-                                <Form className="navbar-search">
-                                  <Form.Group id="topbarSearch">
-                                    <InputGroup className="input-group-merge search-bar">
-                                      <Form.Control type="text" placeholder="Search" />
-                                    </InputGroup>
-                                  </Form.Group>
-                                </Form>
+                            <Form className="navbar-search">
+                              <Form.Group id="topbarSearch">
+                                <InputGroup className="input-group-merge search-bar">
+                                  <Form.Control type="text" placeholder="Search" />
+                                </InputGroup>
+                              </Form.Group>
+                            </Form>
                         </div>
                       </Col>
                     </Row>
@@ -169,6 +198,7 @@ function Users(){
                               handleViewUser={handleViewUser}
                               handleEditUser={handleEditUser}
                               handleDeactivateUser={handleDeactivateUser}
+                              handleReactivateUser={handleReactivateUser}
                             />
                           ))
                         )}
@@ -207,7 +237,7 @@ function Users(){
 };
 
 
-function TableRow({item, index, handleDeactivateUser, handleEditUser, handleViewUser}) {
+function TableRow({item, index, handleDeactivateUser, handleEditUser, handleViewUser, handleReactivateUser}) {
 
   return (
     <tr>
@@ -248,17 +278,32 @@ function TableRow({item, index, handleDeactivateUser, handleEditUser, handleView
               Edit
             </Dropdown.Item>
 
-            <Dropdown.Item
-              className="fw-bold"
-              onClick={() =>
-                handleDeactivateUser(
-                  item.id,
-                )
-              }
-            >
-              <FontAwesomeIcon icon={faFighterJet} className="me-2" />{" "}
-              Deactivate
-            </Dropdown.Item>
+            {
+              item.is_active?
+                <Dropdown.Item
+                  className="fw-bold"
+                  onClick={() =>
+                    handleDeactivateUser(
+                      item.id,
+                    )
+                  }
+                >
+                  <FontAwesomeIcon icon={faFighterJet} className="me-2" />{" "}
+                  Deactivate
+                </Dropdown.Item>
+                :
+                <Dropdown.Item
+                  className="fw-bold"
+                  onClick={() =>
+                    handleReactivateUser(
+                      item.id,
+                    )
+                  }
+                >
+                  <FontAwesomeIcon icon={faCookie} className="me-2" />{" "}
+                  Reactivate
+                </Dropdown.Item>
+            }
           </DropdownMenu>
         </Dropdown>
       </td>

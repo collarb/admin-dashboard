@@ -55,7 +55,7 @@ export default (props = {}) => {
         </Navbar.Toggle>
       </Navbar>
       <CSSTransition timeout={300} in={show} classNames="sidebar-transition">
-        <SimpleBar className={`collapse ${showClass} sidebar d-md-block bg-primary text-white`}>
+        <SimpleBar className={`collapse ${showClass} sidebar d-md-block bg-theme-green text-white`}>
           <div className="sidebar-inner px-4 pt-3">
             <div className="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
               <div className="d-flex align-items-center">
@@ -74,12 +74,12 @@ export default (props = {}) => {
               </Nav.Link>
             </div>
             <Nav className="flex-column pt-3 pt-md-0">
-              <NavItem title="Kampala Connect" link={Routes.Presentation.path} image={ReactHero} />
+              <NavItem title="KCCA CONNECT" link={Routes.Presentation.path} image={ReactHero} />
               <NavItem title="Incidents" icon={faHandHoldingUsd} link={Routes.Incidents.path} />
               <NavItem title="Reports" icon={faBoxOpen} link={Routes.reports.path} />
               <NavItem title="Notifications" link={Routes.Notifications.path} icon={faBell} />
               {
-                canViewUsers(user)? <NavItem title="Users" link={Routes.Users.path} icon={faUser} />: null
+                (user?.id && canViewUsers(user))? <NavItem title="Users" link={Routes.Users.path} icon={faUser} />: null
               }
 
             </Nav>

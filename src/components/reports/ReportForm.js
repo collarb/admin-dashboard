@@ -6,15 +6,15 @@ import useGetMasterData from "../../hooks/incidents/useGetMasterData";
 import Loader from "../core/Loader";
 import useAddReport from '../../hooks/reports/useAddReport';
 
-function ReportForm({edit, refresh, report}) {
-  const [reportType, setReportType] = useState(report.reportType);
-  const [division, setDivision] = useState(report.division);
-  const [parish, setParish] = useState(report.parish);
-  const [village, setVillage] = useState(report.village);
-  const [street, setStreet] = useState(report.street);
-  const [title, setTitle] = useState(report.title);
-  const [description, setDescription] = useState(report.description);
-  const [attachment, setAttachment] = useState(report.attachment);
+function ReportForm({refresh, report}) {
+  const [reportType, setReportType] = useState(report?.reportType || "");
+  const [division, setDivision] = useState(report?.division || "");
+  const [parish, setParish] = useState(report?.parish || "");
+  const [village, setVillage] = useState(report?.village || "");
+  const [street, setStreet] = useState(report?.street || "");
+  const [title, setTitle] = useState(report?.title || "");
+  const [description, setDescription] = useState(report?.description || "");
+  const [attachment, setAttachment] = useState(report?.attachment || null);
   const {
     divisions,
     parishes,
@@ -24,7 +24,7 @@ function ReportForm({edit, refresh, report}) {
     types,
     fetchChildren,
   } = useGetMasterData();
-  const { addReport, adding, success } = useAddReport();
+  const { addReport, success } = useAddReport();
   const { ModalFooter, closeModal } = useModal();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function ReportForm({edit, refresh, report}) {
       closeModal();
       refresh();
     }
-  }, [success])
+  }, [success]);
 
   useEffect(() => {
     if (types && types.length) {
@@ -215,20 +215,6 @@ function ReportForm({edit, refresh, report}) {
       <ModalFooter />
     </Form>
   );
-}
-
-ReportForm.defaultProps = {
-  edit: false,
-  report: {
-    reportType: "",
-    division: "",
-    parish: "",
-    village: "",
-    street: "",
-    title: "",
-    description: "",
-    attachment: null,
-  }
 }
 
 export default ReportForm;

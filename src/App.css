@@ -40,3 +40,7 @@
     transform: rotate(360deg);
   }
 }
+
+.bg-theme-green {
+  background-color: #2a5c37 !important;
+}
