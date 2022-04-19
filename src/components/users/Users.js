@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, InputGroup } from "@themesberg/react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faEye, faForward, faBackward, faEllipsisH, faFighterJet, faPencilAlt, faCookie } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faEye, faForward, faBackward, faEllipsisH, faFighterJet, faPencilAlt, faCookie, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import {
   Col,
   Row,
@@ -24,6 +24,7 @@ import Profile from '../account/Profile';
 
 function Users(){
     const [filter, setFilter] = useState({});
+    const [filterView, setFilterView] = useState({});
     const [searchKey, setSearchKey] = useState(null);
 
     const {loading, users, pageCount, itemsPerPage, page, refresh, onPageChange, loadUsers} = useGetUsers();
@@ -68,13 +69,23 @@ function Users(){
       );
     };
 
-    const handleFilter = params => {
-      setFilter({...filter, ...params});
+    const handleFilter = (key, value, name) => {
+      setFilter({...filter, [key]: value});
+      if(key !== "search") setFilterView({...filterView, [key]: {value, name}});
     }
 
     const handleSearch = event => {
       event.preventDefault();
       setFilter({...filter, search: searchKey});
+    };
+
+    const handleCloseFilter = key => {
+      const _temp = Object.assign({}, filter);
+      const _tempView = Object.assign({}, filterView);
+      delete _temp[key];
+      delete _tempView[key];
+      setFilter(_temp);
+      setFilterView(_tempView);
     };
 
     return (
@@ -88,16 +99,18 @@ function Users(){
                 <Card border="light" className="shadow-sm mb-4">
                   <Card.Header>
                     <Row className="align-items-center">
-                      <Col>
+                      <Col xs={2} xl={2}>
                         <h5>Users</h5>
                       </Col>
-                      <Col>
-                        <div className="d-flex flex-wrap flex-md-nowrap align-items-center py-4">
-                          {/* {
-                            Object.keys(filter).map((item, index) => (
-                              <span key={index}>{filter[item]} X</span>
+                      <Col xs={10} xl={10}>
+                        <div className="d-flex flex-wrap flex-md-nowrap align-items-center py-4 flex-end">
+                          {
+                            Object.keys(filterView).map((item, index) => (
+                              <Button variant="primary" size="sm" className="me-2" key={index} onClick={() => handleCloseFilter(item)}>
+                                { filterView[item]["name"] } <FontAwesomeIcon icon={faTimesCircle} />
+                              </Button>
                             ))
-                          } */}
+                          }
                             <Dropdown>
                                 <Dropdown.Toggle
                                     as={Button}
@@ -111,7 +124,7 @@ function Users(){
                                 <DropdownMenu>
                                     {
                                     USER_STATUSES.map(status=>(
-                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter({is_active: status[0]})}>
+                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter("is_active", status[0], status[1])}>
                                         :{status[1]}
                                         </Dropdown.Item>
                                     ))
@@ -132,7 +145,7 @@ function Users(){
                                 <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
                                     {
                                     ROLES.map(role=>(
-                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter({role: role[0]})}>
+                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter("role", role[0], role[1])}>
                                         :{role[1]}
                                         </Dropdown.Item>
                                     ))
@@ -153,7 +166,7 @@ function Users(){
                                 <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
                                     {
                                     USER_GENDER.map(gender=>(
-                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter({gender: gender[0]})}>
+                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter("gender", gender[0], gender[1])}>
                                         :{gender[1]}
                                         </Dropdown.Item>
                                     ))
