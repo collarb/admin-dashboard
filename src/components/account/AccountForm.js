@@ -58,7 +58,7 @@ function AccountForm({user}) {
       role,
       password,
       profile: {
-        mobile_number: mobile1,
+        ...(user?.id? {}: {mobile_number: mobile1}),
         mobile_number_2: mobile2,
         head_of_department: hod,
         division,
@@ -145,17 +145,20 @@ function AccountForm({user}) {
         </InputGroup>
       </Form.Group>
 
-      <Form.Group className="mb-3">
-        <Form.Label>Telephone number</Form.Label>
-        <InputGroup>
-          <Form.Control
-            type="text"
-            placeholder="Enter telephone number"
-            value={mobile1}
-            onChange={(e) => setMobile1(e.target.value)}
-          />
-        </InputGroup>
-      </Form.Group>
+      {
+        !user?.id &&
+        <Form.Group className="mb-3">
+          <Form.Label>Telephone number</Form.Label>
+          <InputGroup>
+            <Form.Control
+              type="text"
+              placeholder="Enter telephone number"
+              value={mobile1}
+              onChange={(e) => setMobile1(e.target.value)}
+            />
+          </InputGroup>
+        </Form.Group>
+      }
 
       <Form.Group className="mb-3">
         <Form.Label>Telephone number 2</Form.Label>
@@ -267,7 +270,7 @@ function AccountForm({user}) {
 
       {
         !user?.id && <>
-<Form.Group className="mb-3">
+      <Form.Group className="mb-3">
         <Form.Label>Password</Form.Label>
         <InputGroup>
           <Form.Control

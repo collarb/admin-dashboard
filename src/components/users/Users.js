@@ -23,7 +23,8 @@ import AccountForm from '../account/AccountForm';
 import Profile from '../account/Profile';
 
 function Users(){
-    const [filter, setFilter] = useState(null);
+    const [filter, setFilter] = useState({});
+    const [searchKey, setSearchKey] = useState(null);
 
     const {loading, users, pageCount, itemsPerPage, page, refresh, onPageChange, loadUsers} = useGetUsers();
     const { openConfirm, openModal, closeModal } = useModal();
@@ -70,6 +71,11 @@ function Users(){
     const handleFilter = params => {
       setFilter({...filter, ...params});
     }
+
+    const handleSearch = event => {
+      event.preventDefault();
+      setFilter({...filter, search: searchKey});
+    };
 
     return (
       <>
@@ -156,10 +162,15 @@ function Users(){
                                 </Dropdown.Menu>
                             </Dropdown>
 
-                            <Form className="navbar-search">
+                            <Form className="navbar-search" onSubmit={handleSearch}>
                               <Form.Group id="topbarSearch">
                                 <InputGroup className="input-group-merge search-bar">
-                                  <Form.Control type="text" placeholder="Search" />
+                                  <Form.Control 
+                                    type="text" 
+                                    placeholder="Search" 
+                                    value={searchKey} 
+                                    onChange={event => setSearchKey(event.target.value)}
+                                  />
                                 </InputGroup>
                               </Form.Group>
                             </Form>
