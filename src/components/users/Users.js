@@ -2,7 +2,7 @@
 import React from "react";
 import { Form, InputGroup } from "@themesberg/react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faEye, faForward, faBackward } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faEye, faForward, faBackward, faEllipsisH, faFighterJet, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import {
   Col,
   Row,
@@ -17,11 +17,35 @@ import Loader from "../core/Loader";
 import Actions from "../core/actions";
 import {ROLES, USER_STATUSES, USER_GENDER} from "../../util/constants";
 import DropdownMenu from '../core/DropdownMenu';
-import Moment from "react-moment";
+import useModal from '../../hooks/core/useModal';
+import useUpdateUser from '../../hooks/account/useUpdateUser';
+import AccountForm from '../account/AccountForm';
+import Profile from '../account/Profile';
 
 function Users(){
 
     const {loading, users, pageCount, itemsPerPage, page, onPageChange} = useGetUsers();
+    const { openConfirm, openModal } = useModal();
+    const { updateUser } = useUpdateUser();
+
+    const handleViewUser = user => {
+      openModal(<Profile user={user}/>, "User Profile", { size: "lg" });
+    };
+
+    const handleEditUser = user => {
+      openModal(<AccountForm edit={true} user={user} />, "Edit user", {
+        size: "lg",
+      });
+    };
+
+    const handleDeactivateUser = userId => {
+      openConfirm(
+        "Are you sure you want to deactivate this user?",
+        () => {
+          updateUser(userId, { is_active: false });
+        }
+      );
+    };
 
     return (
       <>
@@ -125,9 +149,8 @@ function Users(){
                           <th className="border-0">Full Name</th>
                           <th className="border-0">Email</th>
                           <th className="border-0">Mobile Number</th>
-                          <th className="border-0">Gender</th>
                           <th className="border-0">Role</th>
-                          <th className="border-0">Member Since</th>
+                          <th className="border-0">Status</th>
                           <th className="border-0">Actions</th>
                           <th className="border-0"></th>
                         </tr>
@@ -139,7 +162,14 @@ function Users(){
                           <div>No Users Available</div>
                         ) : (
                           users.map((pt,index) => (
-                            <TableRow key={`page-traffic-${pt.id}`} item={pt} index={index} />
+                            <TableRow 
+                              key={`page-traffic-${pt.id}`} 
+                              item={pt} 
+                              index={index} 
+                              handleViewUser={handleViewUser}
+                              handleEditUser={handleEditUser}
+                              handleDeactivateUser={handleDeactivateUser}
+                            />
                           ))
                         )}
                       </tbody>
@@ -177,7 +207,7 @@ function Users(){
 };
 
 
-function TableRow({item, index}) {
+function TableRow({item, index, handleDeactivateUser, handleEditUser, handleViewUser}) {
 
   return (
     <tr>
@@ -189,11 +219,48 @@ function TableRow({item, index}) {
       <td>{item.full_name}</td>
       <td>{item.email}</td>
       <td>{item.profile?.mobile_number?item.profile.mobile_number:"NIL"}</td>
-      <td>{item.gender}</td>
       <td>{item.display_role}</td>
-      <td><Moment format="ddd, Do MMM YYYY">{item.date_joined}</Moment></td>
+      <td>{item.is_active? "Active": "Deactivated"}</td>
       <td>
-        <a><FontAwesomeIcon icon={faEye} /> View Details</a>
+      <Dropdown className="btn-toolbar">
+          <Dropdown.Toggle
+            as={Button}
+            variant="success"
+            size="sm"
+            className="me-2"
+          >
+            <FontAwesomeIcon icon={faEllipsisH} className="me-2" />
+            Action
+          </Dropdown.Toggle>
+          <DropdownMenu>
+            {/* view details */}
+            <Dropdown.Item
+              className="fw-bold"
+              onClick={() => handleViewUser(item)}
+            >
+              <FontAwesomeIcon icon={faEye} className="me-2" /> View Details
+            </Dropdown.Item>
+            <Dropdown.Item
+              className="fw-bold"
+              onClick={() => handleEditUser(item)}
+            >
+              <FontAwesomeIcon icon={faPencilAlt} className="me-2" />{" "}
+              Edit
+            </Dropdown.Item>
+
+            <Dropdown.Item
+              className="fw-bold"
+              onClick={() =>
+                handleDeactivateUser(
+                  item.id,
+                )
+              }
+            >
+              <FontAwesomeIcon icon={faFighterJet} className="me-2" />{" "}
+              Deactivate
+            </Dropdown.Item>
+          </DropdownMenu>
+        </Dropdown>
       </td>
     </tr>
   );

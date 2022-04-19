@@ -15,6 +15,7 @@ function useModal() {
   const openConfirm = (title, confirm) => {
     setOpen(true);
     setBody(<ModalFooter ok={confirm} okText="Yes" cancelText="No" />);
+    setSize("lg");
     setTitle(title);
   };
 

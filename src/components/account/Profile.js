@@ -1,12 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Card } from "@themesberg/react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHourglass, faClock, faEnvelope, faPhone, faUser } from "@fortawesome/free-solid-svg-icons";
 import Moment from "react-moment";
-import { userContext } from '../../context/userContext';
 
-function Profile() {
-    const { user } = useContext(userContext);
+function Profile({user}) {
 
   return (
     <Card border="light" className="shadow-sm">
@@ -101,6 +99,22 @@ function Profile() {
           <div>
             <Card.Link href="#" className="text-primary">
               {user.display_role}
+            </Card.Link>
+          </div>
+        </div>
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+          <div>
+            <h6>
+              <FontAwesomeIcon
+                icon={faUser}
+                className="icon icon-xs me-3"
+              />
+              Gender
+            </h6>
+          </div>
+          <div>
+            <Card.Link href="#" className="text-primary">
+              {user.gender}
             </Card.Link>
           </div>
         </div>

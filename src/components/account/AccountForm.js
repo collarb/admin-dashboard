@@ -5,31 +5,33 @@ import useModal from "../../hooks/core/useModal";
 import { ACTIVE, FEMALE, LOCK, MALE, ROLES } from "../../util/constants";
 import useAddUser from '../../hooks/account/useAddUser';
 import DangerousText from "../core/DangerousText";
+import useUpdateUser from '../../hooks/account/useUpdateUser';
 
-function AccountForm() {
-  const [surname, setSurname] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [otherName, setOtherName] = useState('');
-  const [gender, setGender] = useState(MALE);
-  const [dob, setDob] = useState('');
-  const [email, setEmail] = useState('');
-  const [mobile1, setMobile1] = useState('');
-  const [mobile2, setMobile2] = useState('');
-  const [division, setDivision] = useState('');
-  const [designation, setDesignation] = useState('');
-  const [department, setDepartment] = useState('');
-  const [address, setAddress] = useState('');
-  const [username, setUsername] = useState('');
+function AccountForm({user}) {
+  const [surname, setSurname] = useState(user?.last_name || '');
+  const [firstName, setFirstName] = useState(user?.first_name || '');
+  const [otherName, setOtherName] = useState(user?.other_name || '');
+  const [gender, setGender] = useState(user?.gender || MALE);
+  const [dob, setDob] = useState(user?.profile?.date_of_birth || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [mobile1, setMobile1] = useState(user?.profile?.mobile_number || '');
+  const [mobile2, setMobile2] = useState(user?.profile?.mobile_number_2 || '');
+  const [division, setDivision] = useState(user?.profile?.division || '');
+  const [designation, setDesignation] = useState(user?.profile?.designation || '');
+  const [department, setDepartment] = useState(user?.profile?.department || '');
+  const [address, setAddress] = useState(user?.profile?.address || '');
+  const [username, setUsername] = useState(user?.username || '');
   const [password, setPassword] = useState('');
   const [repassword, setRepassword] = useState('');
-  const [status, setStatus] = useState(ACTIVE);
-  const [hod, setHod] = useState("0");
+  const [status, setStatus] = useState(user?.is_active || ACTIVE);
+  const [hod, setHod] = useState(user?.profile?.head_of_department || "0");
   const [errorPass, setErrorPass] = useState("");
   const [role, setRole] = useState(ROLES[0][0]);
 
   const { divisions, departments, designations } = useAccountMasterData();
   const { ModalFooter } = useModal();
   const { addUser } = useAddUser();
+  const { updateUser } = useUpdateUser();
 
   useEffect(() => {
     if(divisions.length) setDivision(divisions[0].id);
@@ -44,10 +46,11 @@ function AccountForm() {
       setErrorPass("Passwords do not match")
       return;
     }
-    addUser({
+    const payload = {
       surname,
       first_name: firstName,
-      last_name: otherName,
+      // last_name: otherName,
+      last_name: surname,
       username,
       email,
       gender,
@@ -61,7 +64,8 @@ function AccountForm() {
         department,
         designation
       }
-    });
+    };
+    user?.id? updateUser(user?.id, payload): addUser(payload);
   }
 
   return (
@@ -260,7 +264,9 @@ function AccountForm() {
         </InputGroup>
       </Form.Group>
 
-      <Form.Group className="mb-3">
+      {
+        !user?.id && <>
+<Form.Group className="mb-3">
         <Form.Label>Password</Form.Label>
         <InputGroup>
           <Form.Control
@@ -289,6 +295,8 @@ function AccountForm() {
           />
         </InputGroup>
       </Form.Group>
+        </>
+      }
 
       <Form.Group className="mb-3">
         <Form.Label>Status</Form.Label>
