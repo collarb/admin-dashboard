@@ -482,26 +482,18 @@ export const ReportedIncidentsWidget = (props) => {
   const percentageColor = percentage < 0 ? "text-danger" : "text-success";
 
   return (
-    <Card className="bg-secondary-alt shadow-sm">
+    <Card className="bg-success-alt shadow-sm">
       <Card.Header className="d-flex flex-row align-items-center flex-0">
         <div className="d-block">
           <h4 className="fw-normal mb-2">{title}</h4>
-          {/* <small className="fw-bold mt-2">
-            <span className="me-2">Last Month</span>
-            <FontAwesomeIcon
-              icon={percentageIcon}
-              className={`${percentageColor} me-1`}
-            />
-            <span className={percentageColor}>{percentage}%</span>
-          </small> */}
         </div>
         <div className="d-flex ms-auto">
-          <Button variant="secondary" size="sm" className="me-2">
+          <Button variant="primary" size="sm" className="me-2">
             Month
           </Button>
         </div>
       </Card.Header>
-      <Card.Body className="p-2">
+      <Card.Body className="p-1">
         <DataValueChart data={chart_data} />
       </Card.Body>
     </Card>
