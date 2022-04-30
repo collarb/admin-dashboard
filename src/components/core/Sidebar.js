@@ -4,7 +4,7 @@ import SimpleBar from 'simplebar-react';
 import { useLocation } from "react-router-dom";
 import { CSSTransition } from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBoxOpen, faBell, faHandHoldingUsd, faSignOutAlt,faTimes, faUser} from "@fortawesome/free-solid-svg-icons";
+import { faBoxOpen, faBell, faCarCrash, faSignOutAlt,faTimes, faUser, faBook} from "@fortawesome/free-solid-svg-icons";
 import { Nav, Badge, Image, Button, Navbar } from '@themesberg/react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Routes } from "../../util/routes";
@@ -63,9 +63,9 @@ export default (props = {}) => {
                   <Image src={ProfilePicture} className="card-img-top rounded-circle border-white" />
                 </div>
                 <div className="d-block">
-                  <h6>Hi, Jane</h6>
+                  <h6>{user.full_name}</h6>
                   <Button as={Link} variant="secondary" size="xs" to={Routes.Signin.path} className="text-dark">
-                    <FontAwesomeIcon icon={faSignOutAlt} className="me-2" /> Sign Out
+                    <FontAwesomeIcon icon={faSignOutAlt} className="me-2" /> log Out
                   </Button>
                 </div>
               </div>
@@ -75,8 +75,8 @@ export default (props = {}) => {
             </div>
             <Nav className="flex-column pt-3 pt-md-0">
               <NavItem title="KCCA CONNECT" link={Routes.Presentation.path} image={ReactHero} />
-              <NavItem title="Incidents" icon={faHandHoldingUsd} link={Routes.Incidents.path} />
-              <NavItem title="Reports" icon={faBoxOpen} link={Routes.reports.path} />
+              <NavItem title="Incidents" icon={faCarCrash} link={Routes.Incidents.path} />
+              <NavItem title="Reports" icon={faBook} link={Routes.reports.path} />
               <NavItem title="Notifications" link={Routes.Notifications.path} icon={faBell} />
               {
                 (user?.id && canViewUsers(user))? <NavItem title="Users" link={Routes.Users.path} icon={faUser} />: null
