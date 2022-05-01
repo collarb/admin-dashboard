@@ -90,7 +90,7 @@ export const DashboardIncidents = () => {
           </Col>
           <Col className="text-end">
             <Link to={"/incidents"}>
-              <Button variant="secondary" size="sm">
+              <Button variant="success" size="sm">
                 View all
               </Button>
             </Link>

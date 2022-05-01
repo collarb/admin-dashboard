@@ -1,7 +1,7 @@
 
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faBook, faUser, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import {faBook, faUser, faExclamationTriangle, faCheck, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row } from '@themesberg/react-bootstrap';
 
 import { CounterWidget, NotificationWidget, ReportedIncidentsWidget} from '../core/Widgets';
@@ -10,7 +10,15 @@ import Actions from "../core/actions";
 import useGetDashboardData from '../../hooks/utils/useGetDashboardData';
 
 function Dashboard() {
-  const {data} = useGetDashboardData("start=01-02-2022")
+
+  const {data, setParmas} = useGetDashboardData()
+  const [division, setDivision] = useState()
+
+  useEffect(()=>{
+    if(division){
+      setParmas(`division=${division?.id}`)
+    }
+  },[division])
 
   return (
     <>
@@ -19,8 +27,9 @@ function Dashboard() {
       {data && <Row className="justify-content-md-center">
         <Col xs={12} className="mb-4 d-sm-block">
           <ReportedIncidentsWidget
-            title="Incidents And Reports Summary"
+            title={`Submitted Incidents And Reports Summary : ${division?division.description:"All Divisions"}`}
             value="10,567"
+            setDivision={setDivision}
             percentage={10.57}
             chart_data={{
               labels: data.labels,
@@ -39,7 +48,7 @@ function Dashboard() {
             }}
           />
         </Col>
-        <Col xs={12} sm={6} xl={4} className="mb-4">
+        <Col xs={12} sm={6} xl={2} className="mb-4">
           <CounterWidget
             category="Citizens"
             title={data.users}
@@ -51,7 +60,7 @@ function Dashboard() {
           />
         </Col>
 
-        <Col xs={12} sm={6} xl={4} className="mb-4">
+        <Col xs={12} sm={6} xl={3} className="mb-4">
           <CounterWidget
             category="Incidents"
             title={data.incidents}
@@ -62,8 +71,19 @@ function Dashboard() {
             iconColor="shape-tertiary"
           />
         </Col>
+        <Col xs={12} sm={6} xl={2} className="mb-4">
+          <CounterWidget
+            category="Approved Incidents"
+            title={data.approved_incidents}
+            period={data.period}
+            percentage={0}
+            icon={faCheckSquare}
+            description="Incidents approved summary"
+            iconColor="shape-tertiary"
+          />
+        </Col>
 
-        <Col xs={12} sm={6} xl={4} className="mb-4">
+        <Col xs={12} sm={6} xl={3} className="mb-4">
           <CounterWidget
             category="Reports"
             title={data.reports}
@@ -71,6 +91,17 @@ function Dashboard() {
             percentage={0}
             icon={faBook}
             description="Reports created summary"
+            iconColor="shape-tertiary"
+          />
+        </Col>
+        <Col xs={12} sm={6} xl={2} className="mb-4">
+          <CounterWidget
+            category="Published Reports"
+            title={data.published_reports}
+            period={data.period}
+            percentage={0}
+            icon={faCheck}
+            description="Published reports summary"
             iconColor="shape-tertiary"
           />
         </Col>

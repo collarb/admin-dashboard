@@ -2,9 +2,9 @@ import {useState, useEffect} from 'react';
 import useFetch from '../core/useFetch';
 import {DASHBOARD_DATA_API} from '../../util/apis';
 
-function useGetDashboardData(filter_params) {
+function useGetDashboardData() {
     const [data, setData] = useState(null);
-    const [params, setParmas] = useState(filter_params)
+    const [params, setParmas] = useState("")
     const ajax = useFetch();
 
     const getData = () => {
@@ -17,7 +17,7 @@ function useGetDashboardData(filter_params) {
         getData()
     },[params])
 
-    return {data};
+    return {data, setParmas};
 }
 
 export default useGetDashboardData;

@@ -1,5 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import DropdownMenu from '../core/DropdownMenu';
 import {
   faAngleDown,
   faAngleUp,
@@ -35,6 +36,7 @@ import {
   Button,
   ListGroup,
   ProgressBar,
+  Dropdown,
 } from "@themesberg/react-bootstrap";
 import {
   CircleChart,
@@ -54,7 +56,9 @@ import { Viewer } from "@react-pdf-viewer/core";
 import { fullScreenPlugin } from "@react-pdf-viewer/full-screen";
 import Moment from "react-moment";
 import {Notification} from "./Navbar";
+import { Link } from "react-router-dom";
 import useNotifications from "../../hooks/notification/useNotifications";
+import useGetMasterData from "../../hooks/incidents/useGetMasterData";
 
 export const ProfileCardWidget = () => {
   return (
@@ -477,25 +481,50 @@ export const RankingWidget = () => {
 };
 
 export const ReportedIncidentsWidget = (props) => {
-  const { title, value, percentage, chart_data } = props;
+  const { title, value, percentage, chart_data, setDivision } = props;
   const percentageIcon = percentage < 0 ? faAngleDown : faAngleUp;
   const percentageColor = percentage < 0 ? "text-danger" : "text-success";
+  const {
+    divisions
+  } = useGetMasterData();
 
   return (
     <Card className="bg-success-alt shadow-sm">
-      <Card.Header className="d-flex flex-row align-items-center flex-0">
-        <div className="d-block">
-          <h4 className="fw-normal mb-2">{title}</h4>
-        </div>
-        <div className="d-flex ms-auto">
-          <Button variant="primary" size="sm" className="me-2">
-            Month
-          </Button>
-        </div>
-      </Card.Header>
-      <Card.Body className="p-1">
-        <DataValueChart data={chart_data} />
-      </Card.Body>
+        <Card.Header className="d-flex flex-row align-items-center flex-0">
+          <div className="d-block">
+            <h4 className="fw-normal mb-2">{title}</h4>
+          </div>
+          <div className="d-flex ms-auto">
+            <Button variant="primary" size="sm" className="me-2">
+              <FontAwesomeIcon icon={faCalendar} className="me-2" />
+              Filter By Period
+            </Button>
+            <Dropdown>
+              <Dropdown.Toggle
+                  as={Button}
+                  variant="success"
+                  size="sm"
+                  className="me-2"
+              >
+                  <FontAwesomeIcon icon={faAngleDown} className="me-2" />
+                  Filter By Division
+              </Dropdown.Toggle>
+              <DropdownMenu>
+                  {
+                  divisions.map(division=>(
+                      <Dropdown.Item className="fw-bold" onClick={()=>setDivision(division)}>
+                      {division.name}
+                      </Dropdown.Item>
+                  ))
+                  }
+                  
+              </DropdownMenu>
+          </Dropdown>
+          </div>
+        </Card.Header>
+        <Card.Body className="px-2">
+          <DataValueChart data={chart_data} />
+        </Card.Body>
     </Card>
   );
 };
@@ -918,18 +947,29 @@ export const NotificationWidget = () => {
   const {notifications } = useNotifications("unread=true");
   return (
     <Card border="light" className="shadow-sm">
+      <Card.Header>
+        <Row className="align-items-center">
+          <Col>
+            <div className="d-flex align-items-center justify-content-between pt-2">
+              <h6>
+                  <FontAwesomeIcon
+                    icon={faBell}
+                    className="icon icon-xs me-3"
+                  />
+                  Notifications
+                </h6>
+            </div>
+          </Col>
+          <Col className="text-end">
+            <Link to={"/notifications"}>
+              <Button variant="success" size="sm">
+                View all
+              </Button>
+            </Link>
+          </Col>
+        </Row>
+      </Card.Header>
       <Card.Body>
-        <div className="d-flex align-items-center justify-content-between border-bottom border-light pb-3">
-          <div>
-            <h6>
-              <FontAwesomeIcon
-                icon={faBell}
-                className="icon icon-xs me-3"
-              />
-              Notifications
-            </h6>
-          </div>
-        </div>
           <ListGroup className="list-group-flush">
           {notifications.map(n => <Notification key={`notification-${n.id}`} {...n} />)}
           </ListGroup>
