@@ -49,8 +49,6 @@ import Profile1 from "../../assets/img/team/profile-picture-1.jpg";
 import ProfileCover from "../../assets/img/profile-cover.jpg";
 
 import teamMembers from "../../data/teamMembers";
-// import PDFViewer from 'pdf-viewer-reactjs'
-// import { faStickyNote } from "@fortawesome/free-regular-svg-icons";
 import { Worker } from "@react-pdf-viewer/core";
 import { Viewer } from "@react-pdf-viewer/core";
 import { fullScreenPlugin } from "@react-pdf-viewer/full-screen";
@@ -481,12 +479,8 @@ export const RankingWidget = () => {
 };
 
 export const ReportedIncidentsWidget = (props) => {
-  const { title, value, percentage, chart_data, setDivision } = props;
-  const percentageIcon = percentage < 0 ? faAngleDown : faAngleUp;
-  const percentageColor = percentage < 0 ? "text-danger" : "text-success";
-  const {
-    divisions
-  } = useGetMasterData();
+  const { title, filterDate, chart_data, setDivision } = props;
+  const { divisions } = useGetMasterData();
 
   return (
     <Card className="bg-success-alt shadow-sm">
@@ -495,10 +489,32 @@ export const ReportedIncidentsWidget = (props) => {
             <h4 className="fw-normal mb-2">{title}</h4>
           </div>
           <div className="d-flex ms-auto">
-            <Button variant="primary" size="sm" className="me-2">
-              <FontAwesomeIcon icon={faCalendar} className="me-2" />
-              Filter By Period
-            </Button>
+            <Dropdown>
+              <Dropdown.Toggle
+                    as={Button}
+                    variant="success"
+                    size="sm"
+                    className="me-2"
+                >
+                  <FontAwesomeIcon icon={faCalendar} className="me-2" />
+                  Filter By Date
+              </Dropdown.Toggle>
+
+              <DropdownMenu>
+                <Dropdown.Item className="fw-bold" onClick={() => filterDate("1")}>
+                  This month
+                </Dropdown.Item>
+
+                <Dropdown.Item className="fw-bold" onClick={() => filterDate("2")}>
+                Last month
+                </Dropdown.Item>
+
+                <Dropdown.Item className="fw-bold" onClick={() => filterDate("3")}>
+                  Custom
+                </Dropdown.Item>
+              </DropdownMenu>
+            </Dropdown>
+
             <Dropdown>
               <Dropdown.Toggle
                   as={Button}

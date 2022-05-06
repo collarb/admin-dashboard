@@ -1,24 +1,67 @@
 
 import React, {useState, useEffect} from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faBook, faUser, faExclamationTriangle, faCheck, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row } from '@themesberg/react-bootstrap';
-
 import { CounterWidget, NotificationWidget, ReportedIncidentsWidget} from '../core/Widgets';
 import { DashboardIncidents } from '../incidents/Incidents';
 import Actions from "../core/actions";
 import useGetDashboardData from '../../hooks/utils/useGetDashboardData';
+import useModal from '../../hooks/core/useModal';
+import CustomDateFilterForm from "./CustomDateFilterForm.";
 
 function Dashboard() {
 
-  const {data, setParmas} = useGetDashboardData()
-  const [division, setDivision] = useState()
+  const {data, handleParams} = useGetDashboardData();
+  const [division, setDivision] = useState();
+  const { openModal } = useModal();
 
   useEffect(()=>{
     if(division){
-      setParmas(`division=${division?.id}`)
+      handleParams({division: division?.id})
     }
-  },[division])
+  },[division]);
+
+  const formatDate = d => (("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+  d.getFullYear());
+  ;
+
+  const thisMonthFilter = () => {
+      const date = new Date();
+      const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+      const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+      return [formatDate(firstDay), formatDate(lastDay)];
+  };
+
+  const lastMonthFilter = () => {
+      const date = new Date();
+      const firstDay = new Date(date.getFullYear(), date.getMonth()-1, 1);
+      const lastDay = new Date(date.getFullYear(), date.getMonth(), 0);
+      return [formatDate(firstDay), formatDate(lastDay)];
+  };
+
+  const filterDate = value => {
+      switch(value) {
+          case "1":
+            var res = thisMonthFilter();
+            handleParams({start: res[0], end: res[1]});
+            break;
+
+          case "2":
+            var res = lastMonthFilter();
+            handleParams({start: res[0], end: res[1]});
+            break;
+
+          case "3":
+            openModal(
+              <CustomDateFilterForm handler={handleParams} formatDate={formatDate} />, 
+              "Custom Date Filter"
+            );
+            break;
+
+          default:
+              return null;
+      }
+  };
 
   return (
     <>
@@ -46,6 +89,7 @@ function Dashboard() {
                 },
               ],
             }}
+            filterDate={filterDate}
           />
         </Col>
         <Col xs={12} sm={6} xl={2} className="mb-4">

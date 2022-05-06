@@ -1,0 +1,50 @@
+import React, { useState } from 'react';
+import { Form, InputGroup } from "@themesberg/react-bootstrap";
+import useModal from '../../hooks/core/useModal';
+
+function CustomDateFilterForm({ handleParams, formatDate }) {
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const { ModalFooter } = useModal();
+
+    const customFilter = duration => ({
+        start: formatDate(new Date(duration.start)),
+        end: formatDate(new Date(duration.end))
+    });
+
+    const submit = (event) => {
+        event.preventDefault();
+    };
+
+    return (
+        <Form onSubmit={submit}>
+            <Form.Group className="mb-3">
+                <Form.Label>Start</Form.Label>
+                <InputGroup>
+                <Form.Control
+                    type="date"
+                    placeholder="Start date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                />
+                </InputGroup>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>End</Form.Label>
+                <InputGroup>
+                <Form.Control
+                    type="date"
+                    placeholder="End date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                />
+                </InputGroup>
+            </Form.Group>
+
+            <ModalFooter />
+        </Form>
+    );
+}
+
+export default CustomDateFilterForm;
