@@ -53,7 +53,7 @@ function Dashboard() {
 
           case "3":
             openModal(
-              <CustomDateFilterForm handler={handleParams} formatDate={formatDate} />, 
+              <CustomDateFilterForm handleParams={handleParams} formatDate={formatDate} />, 
               "Custom Date Filter"
             );
             break;

@@ -15,7 +15,6 @@ function useGetDashboardData() {
     };
 
     const handleParams = newParams => {
-        console.log(newParams);
         setParams({...params, ...newParams});
     }
 

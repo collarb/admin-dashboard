@@ -5,15 +5,20 @@ import useModal from '../../hooks/core/useModal';
 function CustomDateFilterForm({ handleParams, formatDate }) {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
-    const { ModalFooter } = useModal();
+    const { ModalFooter , closeModal} = useModal();
 
-    const customFilter = duration => ({
-        start: formatDate(new Date(duration.start)),
-        end: formatDate(new Date(duration.end))
-    });
+    const customFilter = duration => {
+        const { start, end } = duration;
+        return {
+            ...(start? {start: formatDate(new Date(duration.start))}: {}),
+            ...(end? {end: formatDate(new Date(duration.end))}: {})
+        }
+    };
 
     const submit = (event) => {
         event.preventDefault();
+        handleParams(customFilter({start: startDate, end: endDate}));
+        closeModal();
     };
 
     return (
