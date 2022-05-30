@@ -28,7 +28,7 @@ import { Link } from "react-router-dom";
 import Moment from "react-moment";
 
 function Notifications() {
-  const { loading, notifications } = useNotifications();
+  const { loading, notifications, mark_as_read } = useNotifications();
 
   return (
     <>
@@ -71,6 +71,7 @@ function Notifications() {
                             key={`page-traffic-${pt.id}`}
                             item={pt}
                             index={index}
+                            mark_as_read={mark_as_read}
                           />
                         ))
                       )}
@@ -86,7 +87,7 @@ function Notifications() {
   );
 }
 
-function TableRow({ item, index }) {
+function TableRow({ item, index, mark_as_read }) {
   return (
     <tr>
       <td>
@@ -123,7 +124,7 @@ function TableRow({ item, index }) {
               </Dropdown.Item>
             )}
             {item.unread && (
-              <Dropdown.Item className="fw-bold">
+              <Dropdown.Item className="fw-bold" onClick={()=>mark_as_read(item.id, index)}>
                 <FontAwesomeIcon icon={faCheck} className="me-2" />
                 Mark As Read
               </Dropdown.Item>

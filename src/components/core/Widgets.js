@@ -21,6 +21,7 @@ import {
   faEye,
   faThumbsUp,
   faBell,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faAngular,
@@ -53,7 +54,7 @@ import { Worker } from "@react-pdf-viewer/core";
 import { Viewer } from "@react-pdf-viewer/core";
 import { fullScreenPlugin } from "@react-pdf-viewer/full-screen";
 import Moment from "react-moment";
-import {Notification} from "./Navbar";
+import { Notification } from "./Navbar";
 import { Link } from "react-router-dom";
 import useNotifications from "../../hooks/notification/useNotifications";
 import useGetMasterData from "../../hooks/incidents/useGetMasterData";
@@ -484,63 +485,66 @@ export const ReportedIncidentsWidget = (props) => {
 
   return (
     <Card className="bg-success-alt shadow-sm">
-        <Card.Header className="d-flex flex-row align-items-center flex-0">
-          <div className="d-block">
-            <h4 className="fw-normal mb-2">{title}</h4>
-          </div>
-          <div className="d-flex ms-auto">
-            <Dropdown>
-              <Dropdown.Toggle
-                    as={Button}
-                    variant="success"
-                    size="sm"
-                    className="me-2"
-                >
-                  <FontAwesomeIcon icon={faCalendar} className="me-2" />
-                  Filter By Date
-              </Dropdown.Toggle>
+      <Card.Header className="d-flex flex-row align-items-center flex-0">
+        <div className="d-block">
+          <h4 className="fw-normal mb-2">{title}</h4>
+        </div>
+        <div className="d-flex ms-auto">
+          <Dropdown>
+            <Dropdown.Toggle
+              as={Button}
+              variant="success"
+              size="sm"
+              className="me-2"
+            >
+              <FontAwesomeIcon icon={faCalendar} className="me-2" />
+              Filter By Date
+            </Dropdown.Toggle>
 
-              <DropdownMenu>
-                <Dropdown.Item className="fw-bold" onClick={() => filterDate("1")}>
-                  This month
-                </Dropdown.Item>
+            <DropdownMenu>
+              <Dropdown.Item className="fw-bold" onClick={() => filterDate("1")}>
+                This month
+              </Dropdown.Item>
 
-                <Dropdown.Item className="fw-bold" onClick={() => filterDate("2")}>
+              <Dropdown.Item className="fw-bold" onClick={() => filterDate("2")}>
                 Last month
-                </Dropdown.Item>
+              </Dropdown.Item>
 
-                <Dropdown.Item className="fw-bold" onClick={() => filterDate("3")}>
-                  Custom
-                </Dropdown.Item>
-              </DropdownMenu>
-            </Dropdown>
-
-            <Dropdown>
-              <Dropdown.Toggle
-                  as={Button}
-                  variant="success"
-                  size="sm"
-                  className="me-2"
-              >
-                  <FontAwesomeIcon icon={faAngleDown} className="me-2" />
-                  Filter By Division
-              </Dropdown.Toggle>
-              <DropdownMenu>
-                  {
-                  divisions.map(division=>(
-                      <Dropdown.Item className="fw-bold" onClick={()=>setDivision(division)}>
-                      {division.name}
-                      </Dropdown.Item>
-                  ))
-                  }
-                  
-              </DropdownMenu>
+              <Dropdown.Item className="fw-bold" onClick={() => filterDate("3")}>
+                Custom
+              </Dropdown.Item>
+            </DropdownMenu>
           </Dropdown>
-          </div>
-        </Card.Header>
-        <Card.Body className="px-2">
-          <DataValueChart data={chart_data} />
-        </Card.Body>
+
+          <Dropdown>
+            <Dropdown.Toggle
+              as={Button}
+              variant="success"
+              size="sm"
+              className="me-2"
+            >
+              <FontAwesomeIcon icon={faAngleDown} className="me-2" />
+              Filter By Division
+            </Dropdown.Toggle>
+            <DropdownMenu>
+              <Dropdown.Item className="fw-bold" onClick={() => setDivision(null)}> 
+                All
+              </Dropdown.Item>
+              {
+                divisions.map(division => (
+                  <Dropdown.Item className="fw-bold" onClick={() => setDivision(division)}>
+                    {division.name}
+                  </Dropdown.Item>
+                ))
+              }
+
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+      </Card.Header>
+      <Card.Body className="px-2">
+        <DataValueChart data={chart_data} />
+      </Card.Body>
     </Card>
   );
 };
@@ -861,7 +865,7 @@ export const IncidentDetailWidget = ({ data = {} }) => {
             </h6>
             <div className="align-items-center">
               <Card.Link href="#" className="text-primary">
-                {data.latitude? data.latitude: "NIL"}, {data.longitude? data.longitude: "NIL"}
+                {data.latitude ? data.latitude : "NIL"}, {data.longitude ? data.longitude : "NIL"}
               </Card.Link>
             </div>
           </div>
@@ -897,6 +901,23 @@ export const IncidentDetailWidget = ({ data = {} }) => {
           <div>
             <Card.Link href="#" className="text-primary">
               {data.status_display ? data.status_display.toUpperCase() : "NIL"}
+            </Card.Link>
+          </div>
+        </div>
+
+        <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
+          <div>
+            <h6>
+              <FontAwesomeIcon
+                icon={faUser}
+                className="icon icon-xs me-3"
+              />
+              Reported By
+            </h6>
+          </div>
+          <div>
+            <Card.Link href="#" className="text-primary">
+              {data.user ? data.user.full_name+" ("+data.user.display_role+") " : "NIL"}
             </Card.Link>
           </div>
         </div>
@@ -960,7 +981,7 @@ export const AttachementPreviewWidget = ({ title, attachment }) => {
 };
 
 export const NotificationWidget = () => {
-  const {notifications } = useNotifications("unread=true");
+  const { notifications } = useNotifications("unread=true");
   return (
     <Card border="light" className="shadow-sm">
       <Card.Header>
@@ -968,12 +989,12 @@ export const NotificationWidget = () => {
           <Col>
             <div className="d-flex align-items-center justify-content-between pt-2">
               <h6>
-                  <FontAwesomeIcon
-                    icon={faBell}
-                    className="icon icon-xs me-3"
-                  />
-                  Notifications
-                </h6>
+                <FontAwesomeIcon
+                  icon={faBell}
+                  className="icon icon-xs me-3"
+                />
+                Notifications
+              </h6>
             </div>
           </Col>
           <Col className="text-end">
@@ -986,9 +1007,9 @@ export const NotificationWidget = () => {
         </Row>
       </Card.Header>
       <Card.Body>
-          <ListGroup className="list-group-flush">
+        <ListGroup className="list-group-flush">
           {notifications.map(n => <Notification key={`notification-${n.id}`} {...n} />)}
-          </ListGroup>
+        </ListGroup>
       </Card.Body>
     </Card>
   );

@@ -22,12 +22,22 @@ function useNotifications(params) {
         });
     };
 
+    const mark_as_read = (notification_id, index) => {
+        setLoading(true);
+        ajax(`${NOTIFICATIONS_API}${notification_id}/mark_as_read/`).then(data => {
+            let new_notifications = notifications
+            new_notifications[index] = data
+            setNotifications(new_notifications)
+            setLoading(false)
+        });
+    };
+
     const refresh = () => {
         setRefreshing(true);
         loadNotitifcations(setRefreshing);
     };
 
-    return {loading, refreshing, notifications, refresh};
+    return {loading, refreshing, notifications, refresh, mark_as_read};
 }
 
 export default useNotifications;
