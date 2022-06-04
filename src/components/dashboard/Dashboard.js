@@ -12,12 +12,14 @@ import CustomDateFilterForm from "./CustomDateFilterForm.";
 function Dashboard() {
 
   const {data, handleParams} = useGetDashboardData();
-  const [division, setDivision] = useState();
+  const [division, setDivision] = useState(null);
   const { openModal } = useModal();
 
   useEffect(()=>{
     if(division){
       handleParams({division: division?.id})
+    }else{
+      handleParams({division: ""})
     }
   },[division]);
 

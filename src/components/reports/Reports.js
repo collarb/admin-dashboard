@@ -228,7 +228,7 @@ const TableRow = (props) => {
                 {
                   // edit and delete
                   ((user.is_data_entrant &&
-                    item.status_display !== STATUS_APPROVE_DISPLAY) ||
+                    item.status_display !== STATUS_APPROVE_DISPLAY && item.status_display !== STATUS_FORWARD_DISPLAY) ||
                     user.is_manager ||
                     user.is_ddt) && (
                     <>
@@ -314,26 +314,26 @@ const TableRow = (props) => {
                 </Dropdown.Item>
               )}
 
-              {/* approve */}
+            {/* approve */}
             {user.is_manager && item.status_display !== STATUS_APPROVE_DISPLAY && (
-                <Dropdown.Item
-                  className="fw-bold"
-                  onClick={() =>
-                    updateReport(
-                      REPORT,
-                      "Are you sure you want to approve this report?",
-                      item.id,
-                      {
-                        status: STATUS_APPROVE,
-                      }
-                    )
-                  }
-                >
-                  <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
-                </Dropdown.Item>
-              )}
+              <Dropdown.Item
+                className="fw-bold"
+                onClick={() =>
+                  updateReport(
+                    REPORT,
+                    "Are you sure you want to approve this report?",
+                    item.id,
+                    {
+                      status: STATUS_APPROVE,
+                    }
+                  )
+                }
+              >
+                <FontAwesomeIcon icon={faCheck} className="me-2" /> Approve
+              </Dropdown.Item>
+            )}
 
-              {/* publish */}
+            {/* publish */}
             {(user.is_manager || user.is_ddt) &&
               !item.published && item.status_display === STATUS_APPROVE_DISPLAY && (
                 <Dropdown.Item
@@ -353,7 +353,7 @@ const TableRow = (props) => {
                 </Dropdown.Item>
               )}
 
-              {/* unpublish */}
+            {/* unpublish */}
             {(user.is_manager || user.is_ddt) && item.published && (
               <Dropdown.Item
                 className="fw-bold"
