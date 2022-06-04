@@ -1,6 +1,7 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faForward, faBackward, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { Form, InputGroup } from "@themesberg/react-bootstrap";
 import ReactPaginate from "react-paginate";
 import Moment from "react-moment";
 import {
@@ -43,6 +44,9 @@ import ReportForm from "./ReportForm";
 
 
 function Reports() {
+  const [filter, setFilter] = useState({});
+  const [filterView, setFilterView] = useState({});
+  const [searchKey, setSearchKey] = useState(null);
   const { user } = useContext(userContext);
   const {
     reports,
@@ -52,6 +56,7 @@ function Reports() {
     pageCount,
     itemsPerPage,
     page,
+    loadReports,
     onPageChange,
   } = useGetReports();
   const { updateReport, deleteReport, success } = useUpdateReport();
@@ -60,6 +65,10 @@ function Reports() {
   useEffect(() => {
     if (success) refresh();
   }, [success]);
+
+  useEffect(() => {
+    if(filter) loadReports(filter, () => {});
+  }, [filter]);
 
   const handleFeedback = (id) => {
     openModal(<FeedbackForm reportId={id} type={REPORT} />, "Add Feedback");
@@ -72,6 +81,25 @@ function Reports() {
   };
   const viewReportDetails = (id) => {
     openModal(<ReportDetail reportId={id} />, "Report Details", { size: "xl" });
+  };
+
+  const handleFilter = (key, value, name) => {
+    setFilter({...filter, [key]: value});
+    if(key !== "search") setFilterView({...filterView, [key]: {value, name}});
+  }
+
+  const handleSearch = event => {
+    event.preventDefault();
+    setFilter({...filter, search: searchKey});
+  };
+
+  const handleCloseFilter = key => {
+    const _temp = Object.assign({}, filter);
+    const _tempView = Object.assign({}, filterView);
+    delete _temp[key];
+    delete _tempView[key];
+    setFilter(_temp);
+    setFilterView(_tempView);
   };
 
   return (
@@ -87,6 +115,93 @@ function Reports() {
                     <Col>
                       <h5>Reports</h5>
                     </Col>
+                    <Col xs={10} xl={10}>
+                        <div className="d-flex flex-wrap flex-md-nowrap align-items-center py-4 flex-end">
+                          {
+                            Object.keys(filterView).map((item, index) => (
+                              <Button variant="primary" size="sm" className="me-2" key={index} onClick={() => handleCloseFilter(item)}>
+                                { filterView[item]["name"] } <FontAwesomeIcon icon={faTimesCircle} />
+                              </Button>
+                            ))
+                          }
+                            {/* <Dropdown>
+                                <Dropdown.Toggle
+                                    as={Button}
+                                    variant="success"
+                                    size="sm"
+                                    className="me-2"
+                                >
+                                    <FontAwesomeIcon icon={faAngleDown} className="me-2" />
+                                    Status Filter
+                                </Dropdown.Toggle>
+                                <DropdownMenu>
+                                    {
+                                    USER_STATUSES.map(status=>(
+                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter("is_active", status[0], status[1])}>
+                                        :{status[1]}
+                                        </Dropdown.Item>
+                                    ))
+                                    }
+                                    
+                                </DropdownMenu>
+                            </Dropdown> */}
+                            {/* <Dropdown>
+                                <Dropdown.Toggle
+                                    as={Button}
+                                    variant="success"
+                                    size="sm"
+                                    className="me-2"
+                                >
+                                    <FontAwesomeIcon icon={faAngleDown} className="me-2" />
+                                    Role Filter
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
+                                    {
+                                    ROLES.map(role=>(
+                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter("role", role[0], role[1])}>
+                                        :{role[1]}
+                                        </Dropdown.Item>
+                                    ))
+                                    }
+                                    
+                                </Dropdown.Menu>
+                            </Dropdown> */}
+                            {/* <Dropdown>
+                                <Dropdown.Toggle
+                                    as={Button}
+                                    variant="success"
+                                    size="sm"
+                                    className="me-2"
+                                >
+                                    <FontAwesomeIcon icon={faAngleDown} className="me-2" />
+                                    Gender Filter
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
+                                    {
+                                    USER_GENDER.map(gender=>(
+                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter("gender", gender[0], gender[1])}>
+                                        :{gender[1]}
+                                        </Dropdown.Item>
+                                    ))
+                                    }
+                                    
+                                </Dropdown.Menu>
+                            </Dropdown> */}
+
+                            <Form className="navbar-search" onSubmit={handleSearch}>
+                              <Form.Group id="topbarSearch">
+                                <InputGroup className="input-group-merge search-bar">
+                                  <Form.Control 
+                                    type="text" 
+                                    placeholder="Search" 
+                                    value={searchKey} 
+                                    onChange={event => setSearchKey(event.target.value)}
+                                  />
+                                </InputGroup>
+                              </Form.Group>
+                            </Form>
+                        </div>
+                      </Col>
                   </Row>
                 </Card.Header>
                 <Card.Body className="pb-0">
@@ -100,10 +215,10 @@ function Reports() {
                         <th className="border-0">Type</th>
                         <th className="border-0">Reference NO.</th>
                         <th className="border-0">Title</th>
-                        <th className="border-0">Views &amp;  Likes </th>
                         <th className="border-0">Affected Area</th>
                         <th className="border-0">Reported On</th>
                         <th className="border-0">Status</th>
+                        <th className="border-0">Views &amp;  Likes </th>
                         <th className="border-0"></th>
                       </tr>
                     </thead>
@@ -196,6 +311,15 @@ const TableRow = (props) => {
           {item.title}
         </p>
       </td>
+      
+      <td>{item.area.name}</td>
+      <td>
+        <Moment format="ddd, Do MMM YYYY">{item.created_on}</Moment>
+      </td>
+      <td>
+        {item.status_display}
+        {item.published ? " & Published" : null}
+      </td>
       <td>
         <Row className="d-flex align-items-center">
           <Col className="col-auto align-items-center mx-3" xs={2} sm={2} xl={2}>
@@ -215,14 +339,6 @@ const TableRow = (props) => {
             <FontAwesomeIcon icon={faThumbsUp} />
           </Col>
         </Row>
-      </td>
-      <td>{item.area.name}</td>
-      <td>
-        <Moment format="ddd, Do MMM YYYY">{item.created_on}</Moment>
-      </td>
-      <td>
-        {item.status_display}
-        {item.published ? " & Published" : null}
       </td>
       <td>
         <Dropdown className="btn-toolbar">

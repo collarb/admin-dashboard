@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import { REPORT_API } from '../../util/apis';
 import useFetch from '../core/useFetch';
+import { createQueryParams } from '../../util/helper';
 
 function useGetReports() {
     const [loading, setLoading] = useState(true);
@@ -13,11 +14,11 @@ function useGetReports() {
     const itemsPerPage = 10;
 
     useEffect(() => {
-        loadReports(setLoading);
+        loadReports({},setLoading);
     }, [page]);
 
-    const loadReports = callback => {
-        ajax(`${REPORT_API}?page=${1+page}&page_size=${itemsPerPage}`).then(data => {
+    const loadReports = (filter, callback) => {
+        ajax(`${REPORT_API}?page=${1+page}&page_size=${itemsPerPage}${createQueryParams(filter)}`).then(data => {
             if (data) {
                 setReports(data.results);
                 setPageCount(data.count);
@@ -28,7 +29,7 @@ function useGetReports() {
 
     const refresh = () => {
         setRefreshing(true);
-        loadReports(setRefreshing);
+        loadReports({},setRefreshing);
     };
 
     const onPageChange = value => {
