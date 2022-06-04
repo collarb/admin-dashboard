@@ -767,6 +767,23 @@ export const ReportDetailWidget = ({ data = {} }) => {
           </>
         )}
 
+        <div className="d-flex align-items-center justify-content-between border-top border-bottom border-light py-3">
+          <div>
+            <h6>
+              <FontAwesomeIcon
+                icon={faUser}
+                className="icon icon-xs me-3"
+              />
+              Created By
+            </h6>
+          </div>
+          <div>
+            <Card.Link href="#" className="text-primary">
+              {data.user ? data.user.full_name+" ("+data.user.display_role+") " : "NIL"}
+            </Card.Link>
+          </div>
+        </div>
+
         <div className="d-flex align-items-center justify-content-between border-top border-light py-3">
           <div>
             <h6>
