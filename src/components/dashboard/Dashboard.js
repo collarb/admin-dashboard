@@ -106,39 +106,58 @@ function Dashboard() {
           />
         </Col>
 
-        <Col xs={12} sm={6} xl={3} className="mb-4">
-          <CounterWidget
-            category="Incidents"
-            title={data.incidents}
-            period={data.period}
-            percentage={0}
-            icon={faExclamationTriangle}
-            description="Incidents reported summary"
-            iconColor="shape-tertiary"
-          />
+        <Col xs={12} sm={6} xl={4} className="mb-4">
+          <Row>
+            <Col xs={12} sm={12} xl={12} className="mb-4">
+              <CounterWidget
+                category="Incidents"
+                title={data.incidents}
+                period={data.period}
+                percentage={0}
+                icon={faExclamationTriangle}
+                description="Incidents reported summary"
+                iconColor="shape-tertiary"
+              />
+            </Col>
+            <Col xs={12} sm={12} xl={12} className="mb-4">
+              <CounterWidget
+                category="Approved Incidents"
+                title={data.approved_incidents}
+                period={data.period}
+                percentage={0}
+                icon={faCheckSquare}
+                description="Incidents approved summary"
+                iconColor="shape-tertiary"
+              />
+            </Col>
+          </Row>
+          
         </Col>
-        <Col xs={12} sm={6} xl={2} className="mb-4">
-          <CounterWidget
-            category="Approved Incidents"
-            title={data.approved_incidents}
-            period={data.period}
-            percentage={0}
-            icon={faCheckSquare}
-            description="Incidents approved summary"
-            iconColor="shape-tertiary"
-          />
-        </Col>
-
-        <Col xs={12} sm={6} xl={3} className="mb-4">
-          <CounterWidget
-            category="Reports"
-            title={data.reports}
-            period={data.period}
-            percentage={0}
-            icon={faBook}
-            description="Reports created summary"
-            iconColor="shape-tertiary"
-          />
+        <Col xs={12} sm={6} xl={4} className="mb-4">
+          <Row>
+            <Col xs={12} sm={12} xl={12} className="mb-4">
+              <CounterWidget
+                category="Reports"
+                title={data.reports}
+                period={data.period}
+                percentage={0}
+                icon={faBook}
+                description="Reports created summary"
+                iconColor="shape-tertiary"
+              />
+            </Col>
+            <Col xs={12} sm={12} xl={12} className="mb-4">
+              <CounterWidget
+                category="Reports"
+                title={data.reports}
+                period={data.period}
+                percentage={0}
+                icon={faBook}
+                description="Reports created summary"
+                iconColor="shape-tertiary"
+              />
+            </Col>
+          </Row>
         </Col>
         <Col xs={12} sm={6} xl={2} className="mb-4">
           <CounterWidget

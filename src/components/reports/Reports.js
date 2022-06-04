@@ -198,7 +198,7 @@ const TableRow = (props) => {
       </td>
       <td>
         <Row className="d-flex align-items-center">
-          <Col className="col-auto text-end">
+          <Col className="col-auto align-items-center mx-3" xs={2} sm={2} xl={2}>
             <div className="d-flex align-items-center">
               <div>
                 <h4 className="h6 mb-0 text-small">{item.views_count}</h4>
@@ -206,7 +206,7 @@ const TableRow = (props) => {
             </div>
             <FontAwesomeIcon icon={faEye}/>
           </Col>
-          <Col className="col-auto text-end">
+          <Col className="col-auto align-items-center mx-1" xs={2} sm={2} xl={2}>
             <div className="d-flex justify-content-between align-items-center">
               <div>
                 <h4 className="h6 mb-0 text-small">{item.thumbs_up}</h4>
