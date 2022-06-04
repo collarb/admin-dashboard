@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faForward, faBackward } from "@fortawesome/free-solid-svg-icons";
+import { faForward, faBackward, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import ReactPaginate from "react-paginate";
 import Moment from "react-moment";
 import {
@@ -100,6 +100,7 @@ function Reports() {
                         <th className="border-0">Type</th>
                         <th className="border-0">Reference NO.</th>
                         <th className="border-0">Title</th>
+                        <th className="border-0">Views &amp;  Likes </th>
                         <th className="border-0">Affected Area</th>
                         <th className="border-0">Reported On</th>
                         <th className="border-0">Status</th>
@@ -194,6 +195,26 @@ const TableRow = (props) => {
         >
           {item.title}
         </p>
+      </td>
+      <td>
+        <Row className="d-flex align-items-center">
+          <Col className="col-auto text-end">
+            <div className="d-flex align-items-center">
+              <div>
+                <h4 className="h6 mb-0 text-small">{item.views_count}</h4>
+              </div>
+            </div>
+            <FontAwesomeIcon icon={faEye}/>
+          </Col>
+          <Col className="col-auto text-end">
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <h4 className="h6 mb-0 text-small">{item.thumbs_up}</h4>
+              </div>
+            </div>
+            <FontAwesomeIcon icon={faThumbsUp} />
+          </Col>
+        </Row>
       </td>
       <td>{item.area.name}</td>
       <td>
