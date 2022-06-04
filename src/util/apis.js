@@ -1,5 +1,6 @@
 export const BASE_API = "https://api.onekomplex.com/api/";
 export const LOGIN_API = `${BASE_API}token/`;
+export const FORGOT_PASS_API = `${BASE_API}token/`;
 export const REGISTER_API = `${BASE_API}users/register/`;
 export const INCIDENTS_API = `${BASE_API}incident/`;
 export const ACCOUNT_API = `${BASE_API}account/me`;

@@ -5,6 +5,7 @@ import {  Col, Row, Form, Card, Button, Container, InputGroup } from "@themesber
 import { Link } from "react-router-dom";
 import useLogin from '../../hooks/account/useLogin';
 import Loader from "../core/Loader";
+import Background from '../../assets/img/kampala.jpeg';
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -17,7 +18,7 @@ function Login() {
     }
 
   return (
-    <main>
+    <main style={{backgroundImage: `url(${Background})`, height: "100vh", width: "100%"}}>
       <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
         <Container>
           <Row className="justify-content-center form-bg-image">
@@ -68,8 +69,8 @@ function Login() {
                       </InputGroup>
                     </Form.Group>
                     <div className="d-flex justify-content-between align-items-center mb-4">
-                      <Card.Link className="small text-end">
-                        Lost password?
+                      <Card.Link className="small text-end" >
+                        <Link to="/forgot_password">Lost password?</Link>
                       </Card.Link>
                     </div>
                   </Form.Group>
@@ -77,8 +78,6 @@ function Login() {
                     Sign in
                   </Button>
                 </Form>
-
-                
               </div>
             </Col>
           </Row>

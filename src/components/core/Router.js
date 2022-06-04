@@ -13,6 +13,7 @@ import Notifications from '../notifications/Notifications';
 import ModalContextProvider from "../../context/ModalContext";
 import Loader from "../core/Loader";
 import Users from "../users/Users";
+import ForgotPassword from "../account/ForgotPassword";
 
 
 function Router() {
@@ -36,6 +37,7 @@ function Router() {
   ) : (
     <>
       <Route path="/login" component={Login} />
+      <Route to="/forgot_password" component={ForgotPassword} />
       <Redirect to="/login" />
     </>
   );
