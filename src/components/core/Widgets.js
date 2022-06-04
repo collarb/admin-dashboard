@@ -181,7 +181,7 @@ export const CounterWidget = (props) => {
       <Card.Body>
         <Row className="d-block d-xl-flex align-items-center">
           <Col
-            xl={5}
+            xl={3}
             className="text-xl-center d-flex align-items-center justify-content-xl-center mb-3 mb-xl-0"
           >
             <div

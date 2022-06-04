@@ -1,6 +1,6 @@
 
 import React, {useState, useEffect} from "react";
-import {faBook, faUser, faExclamationTriangle, faCheck, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
+import {faBook, faUser, faExclamationTriangle, faCheck, faCheckSquare, faCogs, faVoteYea, faEyeDropper, faEyeSlash, faThumbtack } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row } from '@themesberg/react-bootstrap';
 import { CounterWidget, NotificationWidget, ReportedIncidentsWidget} from '../core/Widgets';
 import { DashboardIncidents } from '../incidents/Incidents';
@@ -148,12 +148,12 @@ function Dashboard() {
             </Col>
             <Col xs={12} sm={12} xl={12} className="mb-4">
               <CounterWidget
-                category="Reports"
-                title={data.reports}
+                category="Others"
+                title={`${data.views} views | ${data.likes} likes `}
                 period={data.period}
                 percentage={0}
-                icon={faBook}
-                description="Reports created summary"
+                icon={faThumbtack}
+                description="Collective Reports Views &amp; Likes"
                 iconColor="shape-tertiary"
               />
             </Col>
