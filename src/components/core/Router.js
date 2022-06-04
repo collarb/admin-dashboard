@@ -37,7 +37,7 @@ function Router() {
   ) : (
     <>
       <Route path="/login" component={Login} />
-      <Route to="/forgot_password" component={ForgotPassword} />
+      <Route path="/forgot_password" component={ForgotPassword} />
       <Redirect to="/login" />
     </>
   );
