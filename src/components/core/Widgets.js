@@ -527,7 +527,7 @@ export const ReportedIncidentsWidget = (props) => {
               Filter By Division
             </Dropdown.Toggle>
             <DropdownMenu>
-              <Dropdown.Item className="fw-bold" onClick={() => setDivision(null)}> 
+              <Dropdown.Item className="fw-bold" onClick={() => setDivision(null)}>
                 All
               </Dropdown.Item>
               {
@@ -697,7 +697,7 @@ export const ReportDetailWidget = ({ data = {} }) => {
           </div>
           <div>
             <Card.Link href="#" className="text-primary">
-              <Moment format="ddd, Do MMM YYYY">
+              <Moment format="ddd, D MMM YYYY H:MM:SS">
                 {data.created_on ? data.created_on : "NIL"}
               </Moment>
             </Card.Link>
@@ -779,7 +779,8 @@ export const ReportDetailWidget = ({ data = {} }) => {
           </div>
           <div>
             <Card.Link href="#" className="text-primary">
-              {data.user ? data.user.full_name+" ("+data.user.display_role+") " : "NIL"}
+              {data.user ? `${data.user.full_name} (${data.user.display_role})` : "NIL"}
+              {data.user.profile ? `${data.user.profile.mobile_number}|${data.user.profile.mobile_number_2}` : ""}
             </Card.Link>
           </div>
         </div>
@@ -899,7 +900,7 @@ export const IncidentDetailWidget = ({ data = {} }) => {
           </div>
           <div>
             <Card.Link href="#" className="text-primary">
-              <Moment format="ddd, Do MMM YYYY">
+              <Moment format="ddd, Do MMM YYYY H:MM:SS">
                 {data.created_on ? data.created_on : "NIL"}
               </Moment>
             </Card.Link>
@@ -934,7 +935,8 @@ export const IncidentDetailWidget = ({ data = {} }) => {
           </div>
           <div>
             <Card.Link href="#" className="text-primary">
-              {data.user ? data.user.full_name+" ("+data.user.display_role+") " : "NIL"}
+              {data.user ? `${data.user.full_name} (${data.user.display_role})` : "NIL"}
+              {data.user.profile ? `${data.user.profile.mobile_number}|${data.user.profile.mobile_number_2}` : ""}
             </Card.Link>
           </div>
         </div>
