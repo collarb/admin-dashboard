@@ -780,7 +780,7 @@ export const ReportDetailWidget = ({ data = {} }) => {
           <div>
             <Card.Link href="#" className="text-primary">
               {data.user ? `${data.user.full_name} (${data.user.display_role})` : "NIL"}
-              {data.user.profile ? `${data.user.profile.mobile_number}|${data.user.profile.mobile_number_2}` : ""}
+              {data.user.profile ? ` ${data.user.profile.mobile_number} | ${data.user.profile.mobile_number_2} ` : ""}
             </Card.Link>
           </div>
         </div>
@@ -936,7 +936,7 @@ export const IncidentDetailWidget = ({ data = {} }) => {
           <div>
             <Card.Link href="#" className="text-primary">
               {data.user ? `${data.user.full_name} (${data.user.display_role})` : "NIL"}
-              {data.user.profile ? `${data.user.profile.mobile_number}|${data.user.profile.mobile_number_2}` : ""}
+              {data.user.profile ? ` ${data.user.profile.mobile_number} | ${data.user.profile.mobile_number_2}` : ""}
             </Card.Link>
           </div>
         </div>
