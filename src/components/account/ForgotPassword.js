@@ -14,12 +14,19 @@ function ForgotPassword() {
     const submit = event => {
         event.preventDefault();
         if (email) {
-            submitForgotPassword({});
+            submitForgotPassword({action: "request", email});
         }
     }
 
     return (
-        <main style={{ backgroundImage: `url(${Background})`, height: "100vh", width: "100%" }}>
+        <main style={{
+            backgroundImage: `url(${Background})`,
+            height: "100vh",
+            width: "100%",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            backgroundPosition: "center"
+        }}>
             <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
                 <Container>
                     <Row className="justify-content-center form-bg-image">
