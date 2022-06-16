@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import { INCIDENTS_API } from '../../util/apis';
 import useFetch from '../core/useFetch';
+import { createQueryParams } from '../../util/helper';
 
 function useFetchIncidents(pageSize) {
     const [loading, setLoading] = useState(true);
@@ -13,7 +14,7 @@ function useFetchIncidents(pageSize) {
     const itemsPerPage = pageSize || 10;
 
     useEffect(() => {
-        loadIncidents(setLoading);
+        loadIncidents({},setLoading);
     }, [page]);
 
 
@@ -21,8 +22,8 @@ function useFetchIncidents(pageSize) {
         loadIncidents(setRefreshing);
     };
 
-    const loadIncidents = callback => {
-        ajax(`${INCIDENTS_API}?page=${1+page}&page_size=${itemsPerPage}`).then(data => {
+    const loadIncidents = (filter,callback) => {
+        ajax(`${INCIDENTS_API}?page=${1+page}&page_size=${itemsPerPage}${createQueryParams(filter)}`).then(data => {
             if (data) {
                 setIncidents(data.results);
                 setPageCount(data.count);
@@ -36,7 +37,7 @@ function useFetchIncidents(pageSize) {
         setLoading(true);
     };
 
-    return {loading, incidents, refreshing, pageCount, itemsPerPage, page, onPageChange, refresh};
+    return {loading, incidents, refreshing, pageCount, itemsPerPage, page, onPageChange, refresh, loadIncidents};
 }
 
 export default useFetchIncidents;

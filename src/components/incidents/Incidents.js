@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEnvelopeOpenText,
@@ -8,6 +8,7 @@ import {
   faForward,
   faBackward,
   faEye,
+  faTimesCircle
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Col,
@@ -30,6 +31,7 @@ import {
   STATUS_APPROVE_DISPLAY,
   STATUS_PENDING_DISPLAY,
 } from "../../util/constants";
+import { Form, InputGroup } from "@themesberg/react-bootstrap";
 import { INCIDENTS_API } from "../../util/apis";
 import DropdownMenu from "../core/DropdownMenu";
 import { userContext } from "../../context/userContext";
@@ -135,7 +137,12 @@ function Incidents() {
     itemsPerPage,
     page,
     onPageChange,
+    loadIncidents
   } = useFetchIncidents();
+
+  const [filter, setFilter] = useState({});
+  const [filterView, setFilterView] = useState({});
+  const [searchKey, setSearchKey] = useState(null);
   const { updateReport, success } = useUpdateReport();
   const { user } = useContext(userContext);
   const { openModal } = useModal();
@@ -143,6 +150,10 @@ function Incidents() {
   useEffect(() => {
     if (success) refresh();
   }, [success]);
+
+  useEffect(() => {
+    if(filter) loadIncidents(filter, () => {});
+  }, [filter]);
 
   const viewIncidentDetails = (id) => {
     openModal(<IncidentDetail incidentId={id} />, "Incident Details", {
@@ -155,6 +166,20 @@ function Incidents() {
       <FeedbackForm reportId={id} type={INCIDENTS_API} />,
       "Add Feedback"
     );
+  };
+
+  const handleSearch = event => {
+    event.preventDefault();
+    setFilter({...filter, search: searchKey});
+  };
+
+  const handleCloseFilter = key => {
+    const _temp = Object.assign({}, filter);
+    const _tempView = Object.assign({}, filterView);
+    delete _temp[key];
+    delete _tempView[key];
+    setFilter(_temp);
+    setFilterView(_tempView);
   };
 
   return (
@@ -171,6 +196,29 @@ function Incidents() {
                     <Col>
                       <h5>Reported Incidents</h5>
                     </Col>
+                    <Col xs={12} xl={6}>
+                        <div className="d-flex flex-wrap flex-md-nowrap align-items-center py-4 flex-end">
+                          {
+                            Object.keys(filterView).map((item, index) => (
+                              <Button variant="primary" size="sm" className="me-2" key={index} onClick={() => handleCloseFilter(item)}>
+                                { filterView[item]["name"] } <FontAwesomeIcon icon={faTimesCircle} />
+                              </Button>
+                            ))
+                          }
+                            <Form className="navbar-search" onSubmit={handleSearch}>
+                              <Form.Group id="topbarSearch">
+                                <InputGroup className="input-group-merge search-bar">
+                                  <Form.Control 
+                                    type="text" 
+                                    placeholder="Enter Search Key and Press Enter" 
+                                    value={searchKey} 
+                                    onChange={event => setSearchKey(event.target.value)}
+                                  />
+                                </InputGroup>
+                              </Form.Group>
+                            </Form>
+                        </div>
+                      </Col>
                   </Row>
                 </Card.Header>
                 <Card.Body className="pb-0">
