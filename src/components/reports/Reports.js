@@ -13,6 +13,7 @@ import {
   faTimesCircle,
   faEye,
   faEllipsisH,
+  faAngleDown
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Col,
@@ -40,6 +41,7 @@ import DropdownMenu from "../core/DropdownMenu";
 import ReportDetail from "./ReportDetail";
 import { userContext } from "../../context/userContext";
 import ReportForm from "./ReportForm";
+import useGetMasterData from "../../hooks/incidents/useGetMasterData";
 
 
 
@@ -61,6 +63,9 @@ function Reports() {
   } = useGetReports();
   const { updateReport, deleteReport, success } = useUpdateReport();
   const { openModal } = useModal();
+  const {
+    types
+  } = useGetMasterData();
 
   useEffect(() => {
     if (success) refresh();
@@ -115,7 +120,7 @@ function Reports() {
                     <Col>
                       <h5>Reports</h5>
                     </Col>
-                    <Col xs={10} xl={10}>
+                    <Col xs={12} xl={6}>
                         <div className="d-flex flex-wrap flex-md-nowrap align-items-center py-4 flex-end">
                           {
                             Object.keys(filterView).map((item, index) => (
@@ -124,7 +129,7 @@ function Reports() {
                               </Button>
                             ))
                           }
-                            {/* <Dropdown>
+                            <Dropdown>
                                 <Dropdown.Toggle
                                     as={Button}
                                     variant="success"
@@ -132,68 +137,26 @@ function Reports() {
                                     className="me-2"
                                 >
                                     <FontAwesomeIcon icon={faAngleDown} className="me-2" />
-                                    Status Filter
+                                    Type Filter
                                 </Dropdown.Toggle>
                                 <DropdownMenu>
                                     {
-                                    USER_STATUSES.map(status=>(
-                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter("is_active", status[0], status[1])}>
-                                        :{status[1]}
+                                    types.map(type=>(
+                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter("type", type.id, type.name)}>
+                                        :{type.name}
                                         </Dropdown.Item>
                                     ))
                                     }
                                     
                                 </DropdownMenu>
-                            </Dropdown> */}
-                            {/* <Dropdown>
-                                <Dropdown.Toggle
-                                    as={Button}
-                                    variant="success"
-                                    size="sm"
-                                    className="me-2"
-                                >
-                                    <FontAwesomeIcon icon={faAngleDown} className="me-2" />
-                                    Role Filter
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
-                                    {
-                                    ROLES.map(role=>(
-                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter("role", role[0], role[1])}>
-                                        :{role[1]}
-                                        </Dropdown.Item>
-                                    ))
-                                    }
-                                    
-                                </Dropdown.Menu>
-                            </Dropdown> */}
-                            {/* <Dropdown>
-                                <Dropdown.Toggle
-                                    as={Button}
-                                    variant="success"
-                                    size="sm"
-                                    className="me-2"
-                                >
-                                    <FontAwesomeIcon icon={faAngleDown} className="me-2" />
-                                    Gender Filter
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu className="dashboard-dropdown dropdown-menu-left mt-2">
-                                    {
-                                    USER_GENDER.map(gender=>(
-                                        <Dropdown.Item className="fw-bold" onClick={() => handleFilter("gender", gender[0], gender[1])}>
-                                        :{gender[1]}
-                                        </Dropdown.Item>
-                                    ))
-                                    }
-                                    
-                                </Dropdown.Menu>
-                            </Dropdown> */}
+                            </Dropdown>
 
                             <Form className="navbar-search" onSubmit={handleSearch}>
                               <Form.Group id="topbarSearch">
                                 <InputGroup className="input-group-merge search-bar">
                                   <Form.Control 
                                     type="text" 
-                                    placeholder="Search" 
+                                    placeholder="Enter Search Key and Press Enter" 
                                     value={searchKey} 
                                     onChange={event => setSearchKey(event.target.value)}
                                   />

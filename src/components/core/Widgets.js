@@ -779,7 +779,9 @@ export const ReportDetailWidget = ({ data = {} }) => {
           </div>
           <div>
             <Card.Link href="#" className="text-primary">
-              {data.user ? `${data.user.full_name} (${data.user.display_role})` : "NIL"}
+              <h6>
+                {data.user ? `${data.user.full_name} (${data.user.display_role})` : "NIL"}
+              </h6>
               {data.user.profile ? ` ${data.user.profile.mobile_number} | ${data.user.profile.mobile_number_2} ` : ""}
             </Card.Link>
           </div>
@@ -879,7 +881,7 @@ export const IncidentDetailWidget = ({ data = {} }) => {
                 icon={faMapMarker}
                 className="icon icon-xs me-3"
               />
-              Area Geo Co-ordinates
+              GPS Co-ordinates
             </h6>
             <div className="align-items-center">
               <Card.Link href="#" className="text-primary">
@@ -935,7 +937,7 @@ export const IncidentDetailWidget = ({ data = {} }) => {
           </div>
           <div>
             <Card.Link href="#" className="text-primary">
-              {data.user ? `${data.user.full_name} (${data.user.display_role})` : "NIL"}
+              <h6>{data.user ? `${data.user.full_name} (${data.user.display_role})` : "NIL"}</h6>
               {data.user.profile ? ` ${data.user.profile.mobile_number} | ${data.user.profile.mobile_number_2}` : ""}
             </Card.Link>
           </div>

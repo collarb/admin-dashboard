@@ -46,7 +46,7 @@ export const DashboardIncidents = () => {
 
   const TableRow = ({item, index}) => {
     return (
-      <tr>
+      <tr key={index}>
       <td className="fw-bold">
         <Link to={`incidents/${item.id}/`}>
         {item.type_display.name}
